@@ -153,7 +153,7 @@ services:
       - ${WS_PORT}:${WS_PORT}
 
   dashboard:
-    image: 'ghcr.io/novuhq/novu/dashboard:2.2.0'
+    image: 'ghcr.io/novuhq/novu/dashboard:2.3.0'
     depends_on:
       - api
       - worker
