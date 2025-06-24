@@ -1,0 +1,74 @@
+{
+  "info": {
+    "name": "Novu API - Task 2 Admin Roles Testing",
+    "description": "Postman collection for testing Task 2: Admin role management (promote/demote/list members)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/v1", "type": "string" },
+    { "key": "authToken", "value": "", "type": "string" },
+    { "key": "memberId", "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{authToken}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "List All Members",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/organizations/members",
+          "host": ["{{baseUrl}}"],
+          "path": ["organizations", "members"]
+        },
+        "description": "List all members and their roles. Use the _id from the response as memberId for the next requests."
+      },
+      "response": []
+    },
+    {
+      "name": "Promote Member to Admin",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"role\": \"admin\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/organizations/members/{{memberId}}/roles",
+          "host": ["{{baseUrl}}"],
+          "path": ["organizations", "members", "{{memberId}}", "roles"]
+        },
+        "description": "Promote a member to admin. Set memberId variable from the List All Members response."
+      },
+      "response": []
+    },
+    {
+      "name": "Demote Admin to Member",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"role\": \"member\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/organizations/members/{{memberId}}/roles",
+          "host": ["{{baseUrl}}"],
+          "path": ["organizations", "members", "{{memberId}}", "roles"]
+        },
+        "description": "Demote an admin to member. Set memberId variable from the List All Members response."
+      },
+      "response": []
+    }
+  ]
+} 

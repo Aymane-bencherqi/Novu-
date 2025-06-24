@@ -295,73 +295,42 @@ After analyzing the existing codebase, **Phase 1** is the easiest to implement b
 
 ## Current Status / Progress Tracking
 
-**Status**: Task 1 COMPLETED ✅
-**Current Phase**: Task 1 Implementation - SUCCESS
-**Next Steps**: Ready for testing with Postman collection
+**Status**: Starting Task 2 Implementation (API Only)
+**Current Phase**: Task 2 - Create Admin Roles for Instances
+**Next Steps**: Review and enhance member/admin role management APIs
 
-### Task 1: Create Instance with Channel/Language Selection - COMPLETED ✅
+### Task 2: Create Admin Roles for Instances (Organizations)
 
-**Implementation Summary:**
-- ✅ Added `channels` field to Organization entity (ChannelTypeEnum[])
-- ✅ Updated organization schema with channels validation
-- ✅ Updated shared interfaces (ICreateOrganizationDto, IOrganizationEntity)
-- ✅ Enhanced CreateOrganizationDto with validation
-- ✅ Updated CreateOrganizationCommand with channels support
-- ✅ Modified organization creation usecase to handle channels
-- ✅ Updated organization controller to pass channels
-- ✅ Enhanced organization response DTO with channels and languages
-- ✅ API build successful - no compilation errors
+**Goal:**
+- Allow assigning and managing admin roles for organization members via the API.
 
-**Files Modified:**
-1. `libs/dal/src/repositories/organization/organization.entity.ts`
-2. `libs/dal/src/repositories/organization/organization.schema.ts`
-3. `packages/shared/src/dto/organization/create-organization.dto.ts`
-4. `packages/shared/src/entities/organization/organization.interface.ts`
-5. `apps/api/src/app/organization/dtos/create-organization.dto.ts`
-6. `apps/api/src/app/organization/dtos/organization-response.dto.ts`
-7. `apps/api/src/app/organization/usecases/create-organization/create-organization.command.ts`
-8. `apps/api/src/app/organization/usecases/create-organization/create-organization.usecase.ts`
-9. `apps/api/src/app/organization/organization.controller.ts`
+**Micro-Plan:**
+1. Review current member/role endpoints and logic in OrganizationController and related usecases.
+2. If needed, add/adjust API endpoints to:
+   - Assign admin role to a member
+   - Remove admin role from a member
+   - List members with their roles
+3. Ensure proper validation and authorization:
+   - Only organization admins can assign/remove admin roles
+   - Cannot remove own admin role if they are the last admin
+4. Update DTOs and usecases as needed
+5. Test thoroughly with Postman (provide collection)
+6. Document all changes and provide clear testing instructions
 
-**Postman Collection Created:** `Novu_API_Task1_Testing.postman_collection.json`
+**Constraints:**
+- Be extremely careful, precise, and accurate
+- Minimal, safe changes only
+- No breaking changes to existing functionality
 
-### Testing Instructions:
+**Current Status:**
+- Reviewing current implementation of member role management
+- No code changes made yet
 
-**1. Start the API Server:**
-```bash
-cd apps/api
-npm run start:dev
-```
+---
 
-**2. Import Postman Collection:**
-- Open Postman
-- Import the file: `Novu_API_Task1_Testing.postman_collection.json`
-- Update the `baseUrl` variable if needed (default: http://localhost:3000)
-
-**3. Test Cases Available:**
-- **Test 1**: Create organization without channels/languages (backward compatibility)
-- **Test 2**: Create organization with languages only (EN, FR, AR)
-- **Test 3**: Create organization with channels only (Email, SMS, Push)
-- **Test 4**: Create organization with both channels and languages (main test)
-- **Test 5**: Validation test with invalid channel type
-- **Test 6**: Get organization details to verify saved data
-- **Test 7**: List all organizations
-
-**4. Expected Results:**
-- Tests 1-4 should return 201 with organization data including channels/languages
-- Test 5 should return 400 validation error
-- Tests 6-7 should show the created organizations with their preferences
-
-**5. Authentication:**
-- If authentication is required, update the `authToken` variable in Postman
-- Use the "Get Auth Token" request if needed
-
-### Success Criteria Met:
-- ✅ Can create organization with specific channels and languages
-- ✅ Backward compatibility maintained (existing functionality unchanged)
-- ✅ Proper validation for channel types
-- ✅ API responses include channels and languages
-- ✅ No breaking changes to existing API
+**Next:**
+- Review OrganizationController and related usecases for member/admin role management
+- Identify what needs to be added or improved for Task 2
 
 ## Executor's Feedback or Assistance Requests
 

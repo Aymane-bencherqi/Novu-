@@ -136,7 +136,7 @@ export class OrganizationController {
   @ApiExcludeEndpoint()
   @ApiResponse(MemberResponseDto)
   @ApiOperation({
-    summary: 'Update a member role to admin',
+    summary: 'Update a member role (admin/member)',
   })
   @ApiParam({ name: 'memberId', type: String, required: true })
   async updateMemberRoles(
@@ -144,14 +144,10 @@ export class OrganizationController {
     @Param('memberId') memberId: string,
     @Body() body: UpdateMemberRolesDto
   ) {
-    if (body.role !== MemberRoleEnum.OSS_ADMIN) {
-      throw new Error('Only admin role can be assigned to a member');
-    }
-
     return await this.changeMemberRoleUsecase.execute(
       ChangeMemberRoleCommand.create({
         memberId,
-        role: MemberRoleEnum.OSS_ADMIN,
+        role: body.role,
         userId: user._id,
         organizationId: user.organizationId,
       })
