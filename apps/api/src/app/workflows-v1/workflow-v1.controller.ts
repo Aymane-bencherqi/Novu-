@@ -109,7 +109,7 @@ export class WorkflowControllerV1 {
     @Param('workflowId') workflowId: string,
     @Body() body: UpdateWorkflowRequestDto
   ): Promise<WorkflowResponse> {
-    return await this.updateWorkflowByIdUsecase.execute(
+    const result = await this.updateWorkflowByIdUsecase.execute(
       UpdateWorkflowCommand.create({
         environmentId: user.environmentId,
         organizationId: user.organizationId,
@@ -130,6 +130,7 @@ export class WorkflowControllerV1 {
         type: WorkflowTypeEnum.REGULAR,
       })
     );
+    return { ...result, language: (result as any).language ?? null };
   }
 
   @Delete('/:workflowId')
@@ -190,7 +191,7 @@ export class WorkflowControllerV1 {
         userId: user._id,
         workflowIdOrIdentifier: workflowId,
       })
-    );
+    ).then(result => ({ ...result, language: (result as any).language ?? null }));
   }
 
   @Post('')
@@ -230,7 +231,7 @@ export class WorkflowControllerV1 {
         type: WorkflowTypeEnum.REGULAR,
         origin: WorkflowOriginEnum.NOVU_CLOUD_V1,
       })
-    );
+    ).then(result => ({ ...result, language: (result as any).language ?? null }));
   }
 
   @Put('/:workflowId/status')
@@ -255,6 +256,6 @@ export class WorkflowControllerV1 {
         active: body.active,
         templateId: workflowId,
       })
-    );
+    ).then(result => ({ ...result, language: (result as any).language ?? null }));
   }
 }

@@ -122,5 +122,8 @@ export class WorkflowResponse implements INotificationTemplate {
   @IsOptional()
   data?: CustomDataType;
 
+  @ApiPropertyOptional()
+  language?: string;
+
   workflowIntegrationStatus?: WorkflowIntegrationStatus;
 }

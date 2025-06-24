@@ -15,17 +15,16 @@ export class CommunityOrganizationRepository
   }
 
   async findById(id: string, select?: string): Promise<OrganizationEntity | null> {
-    const data = await this.MongooseModel.findById(id, select).read('secondaryPreferred');
+    const data = await this.MongooseModel.findOne({ _id: id, deleted: { $ne: true } }, select).read('secondaryPreferred');
     if (!data) return null;
-
     return this.mapEntity(data.toObject());
   }
 
   async findUserActiveOrganizations(userId: string): Promise<OrganizationEntity[]> {
     const organizationIds = await this.getUsersMembersOrganizationIds(userId);
-
     return await this.find({
       _id: { $in: organizationIds },
+      deleted: { $ne: true },
     });
   }
 

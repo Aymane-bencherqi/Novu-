@@ -52,4 +52,20 @@ export class UpdateWorkflowRequestDto implements IUpdateWorkflowDto {
   @ApiPropertyOptional()
   @IsOptional()
   data?: CustomDataType;
+
+  @ApiPropertyOptional({
+    description: 'Channel for the notification template',
+    enum: ['email', 'sms', 'push', 'in_app', 'chat'],
+  })
+  @IsString()
+  @IsOptional()
+  channel?: string;
+
+  @ApiPropertyOptional({
+    description: 'Language for the notification template',
+    enum: ['en', 'fr', 'ar'],
+  })
+  @IsString()
+  @IsOptional()
+  language?: string;
 }

@@ -66,6 +66,15 @@ const organizationSchema = new Schema<OrganizationDBModel>(
     },
     externalId: Schema.Types.String,
     stripeCustomerId: Schema.Types.String,
+    deleted: {
+      type: Schema.Types.Boolean,
+      default: false,
+      index: true,
+    },
+    deletedAt: {
+      type: Schema.Types.Date,
+      default: null,
+    },
   },
   schemaOptions
 );

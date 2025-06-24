@@ -764,7 +764,7 @@ export class SubscribersV1Controller {
     @Body() body: MarkMessageActionAsSeenDto,
     @Param('subscriberId') subscriberId: string
   ): Promise<MessageResponseDto> {
-    return await this.updateMessageActionsUsecase.execute(
+    const result = await this.updateMessageActionsUsecase.execute(
       UpdateMessageActionsCommand.create({
         organizationId: user.organizationId,
         environmentId: user.environmentId,
@@ -775,6 +775,10 @@ export class SubscribersV1Controller {
         status: body.status,
       })
     );
+    return {
+      ...result,
+      template: result.template ? { ...result.template, language: (result.template as any)?.language ?? null } : undefined,
+    };
   }
 
   @ExternalApiAccessible()
@@ -794,14 +798,6 @@ export class SubscribersV1Controller {
           type: 'string',
         },
       },
-    },
-  })
-  @ApiFoundResponse({
-    type: String,
-    status: 302,
-    description: 'Redirects to the specified URL.',
-    headers: {
-      Location: { description: 'The URL to redirect to.', schema: { type: 'string', example: 'https://www.novu.co' } },
     },
   }) // Link to the interface
   @SdkGroupName('Subscribers.Authentication')

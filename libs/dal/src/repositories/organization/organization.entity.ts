@@ -33,6 +33,10 @@ export class OrganizationEntity implements IOrganizationEntity {
   stripeCustomerId?: string;
 
   createdBy?: string;
+
+  deleted?: boolean;
+
+  deletedAt?: Date;
 }
 
 export type Branding = {

@@ -74,4 +74,20 @@ export class CreateWorkflowRequestDto implements ICreateWorkflowDto {
   @ApiPropertyOptional()
   @IsOptional()
   data?: CustomDataType;
+
+  @ApiProperty({
+    description: 'Channel for the notification template',
+    enum: ['email', 'sms', 'push', 'in_app', 'chat'],
+  })
+  @IsString()
+  @IsDefined()
+  channel: string;
+
+  @ApiProperty({
+    description: 'Language for the notification template',
+    enum: ['en', 'fr', 'ar'],
+  })
+  @IsString()
+  @IsDefined()
+  language: string;
 }

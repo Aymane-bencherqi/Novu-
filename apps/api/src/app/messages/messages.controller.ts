@@ -54,7 +54,7 @@ export class MessagesController {
       transactionIdQuery = Array.isArray(query.transactionId) ? query.transactionId : [query.transactionId];
     }
 
-    return await this.getMessagesUsecase.execute(
+    const result = await this.getMessagesUsecase.execute(
       GetMessagesCommand.create({
         organizationId: user.organizationId,
         environmentId: user.environmentId,
@@ -65,6 +65,15 @@ export class MessagesController {
         transactionIds: transactionIdQuery,
       })
     );
+
+    // Map each message's template to include language
+    return {
+      ...result,
+      data: result.data.map(msg => ({
+        ...msg,
+        template: msg.template ? { ...msg.template, language: (msg.template as any)?.language ?? null } : undefined,
+      })),
+    };
   }
 
   @Delete('/:messageId')

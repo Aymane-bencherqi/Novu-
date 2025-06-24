@@ -132,4 +132,12 @@ export class CreateWorkflowCommand extends EnvironmentWithUserCommand {
   @IsEnum(WorkflowStatusEnum)
   @IsOptional()
   status?: WorkflowStatusEnum;
+
+  @IsOptional()
+  @IsString()
+  channel?: string;
+
+  @IsOptional()
+  @IsString()
+  language?: string;
 }

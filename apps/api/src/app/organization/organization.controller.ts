@@ -9,8 +9,9 @@ import {
   Post,
   Put,
   UseInterceptors,
+  ForbiddenException,
 } from '@nestjs/common';
-import { OrganizationEntity } from '@novu/dal';
+import { OrganizationEntity, OrganizationRepository } from '@novu/dal';
 import { MemberRoleEnum, UserSessionData } from '@novu/shared';
 import { ApiExcludeEndpoint, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ApiExcludeController } from '@nestjs/swagger/dist/decorators/api-exclude-controller.decorator';
@@ -43,6 +44,7 @@ import { OrganizationBrandingResponseDto, OrganizationResponseDto } from './dtos
 import { MemberResponseDto } from './dtos/member-response.dto';
 import { RequireAuthentication } from '../auth/framework/auth.decorator';
 import { SdkGroupName, SdkMethodName } from '../shared/framework/swagger/sdk.decorators';
+import { Types, isValidObjectId } from 'mongoose';
 
 @Controller('/organizations')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -59,7 +61,8 @@ export class OrganizationController {
     private updateBrandingDetailsUsecase: UpdateBrandingDetails,
     private getOrganizationsUsecase: GetOrganizations,
     private getMyOrganizationUsecase: GetMyOrganization,
-    private renameOrganizationUsecase: RenameOrganization
+    private renameOrganizationUsecase: RenameOrganization,
+    private organizationRepository: OrganizationRepository
   ) {}
 
   @Post('/')
@@ -205,5 +208,57 @@ export class OrganizationController {
         id: user.organizationId,
       })
     );
+  }
+
+  @Delete('/:organizationId')
+  @ExternalApiAccessible()
+  @ApiOperation({ summary: 'Soft-delete an organization (logical deletion)' })
+  async softDeleteOrganization(
+    @UserSession() user: UserSessionData,
+    @Param('organizationId') organizationId: string
+  ) {
+    if (!user.roles?.includes(MemberRoleEnum.OSS_ADMIN)) {
+      throw new ForbiddenException('Only admins can delete organizations');
+    }
+    const id = isValidObjectId(organizationId) ? new Types.ObjectId(organizationId) : organizationId;
+    console.log('Soft-delete query:', { _id: id });
+    const result = await this.organizationRepository.update(
+      { _id: id },
+      { $set: { deleted: true, deletedAt: new Date() } }
+    );
+    console.log('Soft-delete update result:', result);
+    return { success: result.modified > 0 };
+  }
+
+  @Post('/:organizationId/restore')
+  @ExternalApiAccessible()
+  @ApiOperation({ summary: 'Restore a logically deleted organization' })
+  async restoreOrganization(
+    @UserSession() user: UserSessionData,
+    @Param('organizationId') organizationId: string
+  ) {
+    if (!user.roles?.includes(MemberRoleEnum.OSS_ADMIN)) {
+      throw new ForbiddenException('Only admins can restore organizations');
+    }
+    const id = isValidObjectId(organizationId) ? new Types.ObjectId(organizationId) : organizationId;
+    console.log('Restore query:', { _id: id });
+    const result = await this.organizationRepository.update(
+      { _id: id },
+      { $set: { deleted: false, deletedAt: null } }
+    );
+    console.log('Restore update result:', result);
+    return { success: result.modified > 0 };
+  }
+
+  @Get('/:organizationId/raw')
+  @ExternalApiAccessible()
+  @ApiOperation({ summary: 'Get raw organization document (debug)' })
+  async getRawOrganization(
+    @UserSession() user: UserSessionData,
+    @Param('organizationId') organizationId: string
+  ) {
+    // Access the underlying repository's MongooseModel
+    // @ts-ignore
+    return await this.organizationRepository.organizationRepository.MongooseModel.findOne({ _id: organizationId });
   }
 }

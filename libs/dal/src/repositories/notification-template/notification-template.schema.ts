@@ -228,6 +228,16 @@ const notificationTemplateSchema = new Schema<NotificationTemplateDBModel>(
     rawData: Schema.Types.Mixed,
     payloadSchema: Schema.Types.Mixed,
     issues: Schema.Types.Mixed,
+    channel: {
+      type: Schema.Types.String,
+      enum: ['email', 'sms', 'push', 'in_app', 'chat'],
+      required: true,
+    },
+    language: {
+      type: Schema.Types.String,
+      enum: ['en', 'fr', 'ar'],
+      required: true,
+    },
   },
   { ...schemaOptions, minimize: false }
 );

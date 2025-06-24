@@ -295,27 +295,25 @@ After analyzing the existing codebase, **Phase 1** is the easiest to implement b
 
 ## Current Status / Progress Tracking
 
-**Status**: Starting Task 2 Implementation (API Only)
-**Current Phase**: Task 2 - Create Admin Roles for Instances
-**Next Steps**: Review and enhance member/admin role management APIs
+**Status**: Starting Task 3 Implementation (API Only)
+**Current Phase**: Task 3 - Instance Modification, Logical Deletion, and Restoration
+**Next Steps**: Implement soft-delete and restore endpoints for organizations
 
-### Task 2: Create Admin Roles for Instances (Organizations)
+### Task 3: Instance Modification, Logical Deletion, and Restoration (Organizations)
 
 **Goal:**
-- Allow assigning and managing admin roles for organization members via the API.
+- Allow modifying organization details, soft-deleting (logical deletion), and restoring a deleted organization via the API.
 
 **Micro-Plan:**
-1. Review current member/role endpoints and logic in OrganizationController and related usecases.
-2. If needed, add/adjust API endpoints to:
-   - Assign admin role to a member
-   - Remove admin role from a member
-   - List members with their roles
-3. Ensure proper validation and authorization:
-   - Only organization admins can assign/remove admin roles
-   - Cannot remove own admin role if they are the last admin
-4. Update DTOs and usecases as needed
-5. Test thoroughly with Postman (provide collection)
-6. Document all changes and provide clear testing instructions
+1. Update Organization schema/entity: add `deleted: boolean` and `deletedAt: Date` fields.
+2. Update repository logic: exclude logically deleted organizations from normal queries.
+3. Add API endpoints:
+   - `DELETE /v1/organizations/:organizationId` → Soft-delete (set `deleted: true`, `deletedAt: now`)
+   - `POST /v1/organizations/:organizationId/restore` → Restore (set `deleted: false`, clear `deletedAt`)
+   - (Modification via PATCH already supported)
+4. Authorization: Only admins can delete/restore organizations.
+5. Test thoroughly with Postman (provide collection).
+6. Document all changes and provide clear testing instructions.
 
 **Constraints:**
 - Be extremely careful, precise, and accurate
@@ -323,14 +321,13 @@ After analyzing the existing codebase, **Phase 1** is the easiest to implement b
 - No breaking changes to existing functionality
 
 **Current Status:**
-- Reviewing current implementation of member role management
+- Ready to update organization schema/entity for soft-delete support
 - No code changes made yet
 
 ---
 
 **Next:**
-- Review OrganizationController and related usecases for member/admin role management
-- Identify what needs to be added or improved for Task 2
+- Add `deleted` and `deletedAt` fields to organization schema/entity
 
 ## Executor's Feedback or Assistance Requests
 

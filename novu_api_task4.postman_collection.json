@@ -1,0 +1,110 @@
+{
+  "info": {
+    "name": "Novu API - Task 4 Notification Templates",
+    "description": "CRUD for notification templates by channel and language (en, fr, ar).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Template (Email, EN)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": { "raw": "{{baseUrl}}/v1/notification-templates", "host": ["{{baseUrl}}"], "path": ["v1", "notification-templates"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Welcome Email EN\",\n  \"description\": \"Welcome email in English\",\n  \"notificationGroupId\": \"{{notificationGroupId}}\",\n  \"steps\": [],\n  \"channel\": \"email\",\n  \"language\": \"en\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Template (Email, FR)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": { "raw": "{{baseUrl}}/v1/notification-templates", "host": ["{{baseUrl}}"], "path": ["v1", "notification-templates"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Welcome Email FR\",\n  \"description\": \"Welcome email in French\",\n  \"notificationGroupId\": \"{{notificationGroupId}}\",\n  \"steps\": [],\n  \"channel\": \"email\",\n  \"language\": \"fr\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Template (SMS, AR)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": { "raw": "{{baseUrl}}/v1/notification-templates", "host": ["{{baseUrl}}"], "path": ["v1", "notification-templates"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Welcome SMS AR\",\n  \"description\": \"Welcome SMS in Arabic\",\n  \"notificationGroupId\": \"{{notificationGroupId}}\",\n  \"steps\": [],\n  \"channel\": \"sms\",\n  \"language\": \"ar\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Duplicate Template (Should Fail)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": { "raw": "{{baseUrl}}/v1/notification-templates", "host": ["{{baseUrl}}"], "path": ["v1", "notification-templates"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Welcome Email EN Duplicate\",\n  \"description\": \"Should fail (duplicate)\",\n  \"notificationGroupId\": \"{{notificationGroupId}}\",\n  \"steps\": [],\n  \"channel\": \"email\",\n  \"language\": \"en\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get All Templates",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+        ],
+        "url": { "raw": "{{baseUrl}}/v1/notification-templates", "host": ["{{baseUrl}}"], "path": ["v1", "notification-templates"] }
+      }
+    },
+    {
+      "name": "Update Template (Change Language to FR)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": { "raw": "{{baseUrl}}/v1/notification-templates/{{templateId}}", "host": ["{{baseUrl}}"], "path": ["v1", "notification-templates", "{{templateId}}"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"language\": \"fr\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Delete Template",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" }
+        ],
+        "url": { "raw": "{{baseUrl}}/v1/notification-templates/{{templateId}}", "host": ["{{baseUrl}}"], "path": ["v1", "notification-templates", "{{templateId}}"] }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "token", "value": "" },
+    { "key": "notificationGroupId", "value": "" },
+    { "key": "templateId", "value": "" }
+  ]
+} 

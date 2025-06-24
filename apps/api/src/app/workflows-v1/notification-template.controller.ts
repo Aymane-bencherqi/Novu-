@@ -10,6 +10,7 @@ import {
   Query,
   UseGuards,
   UseInterceptors,
+  ConflictException,
 } from '@nestjs/common';
 import {
   buildWorkflowPreferencesFromPreferenceChannels,
@@ -45,6 +46,7 @@ import { DataBooleanDto } from '../shared/dtos/data-wrapper-dto';
 import { CreateWorkflowQuery } from './queries';
 import { DeleteNotificationTemplateCommand } from './usecases/delete-notification-template/delete-notification-template.command';
 import { RequireAuthentication } from '../auth/framework/auth.decorator';
+import { NotificationTemplateRepository } from '@novu/dal';
 
 /**
  * @deprecated use controller in /workflows directory
@@ -63,7 +65,8 @@ export class NotificationTemplateController {
     private getNotificationTemplateUsecase: GetNotificationTemplate,
     private getNotificationTemplatesUsecase: GetNotificationTemplates,
     private deleteTemplateByIdUsecase: DeleteNotificationTemplate,
-    private changeTemplateActiveStatusUsecase: ChangeTemplateActiveStatus
+    private changeTemplateActiveStatusUsecase: ChangeTemplateActiveStatus,
+    private notificationTemplateRepository: NotificationTemplateRepository
   ) {}
 
   @Get('')
@@ -103,7 +106,7 @@ export class NotificationTemplateController {
     @Param('templateId') templateId: string,
     @Body() body: UpdateWorkflowRequestDto
   ): Promise<WorkflowResponse> {
-    return await this.updateWorkflowUsecase.execute(
+    const result = await this.updateWorkflowUsecase.execute(
       UpdateWorkflowCommand.create({
         environmentId: user.environmentId,
         organizationId: user.organizationId,
@@ -124,6 +127,7 @@ export class NotificationTemplateController {
         type: WorkflowTypeEnum.REGULAR,
       })
     );
+    return { ...result, language: (result as any).language ?? null };
   }
 
   @Delete('/:templateId')
@@ -168,7 +172,7 @@ export class NotificationTemplateController {
         userId: user._id,
         workflowIdOrIdentifier,
       })
-    );
+    ).then(result => ({ ...result, language: (result as any).language ?? null }));
   }
 
   @Post('')
@@ -180,16 +184,33 @@ export class NotificationTemplateController {
     description: `Notification templates have been renamed to Workflows, Please use the new workflows controller`,
     deprecated: true,
   })
-  create(
+  async create(
     @UserSession() user: UserSessionData,
     @Query() query: CreateWorkflowQuery,
     @Body() body: CreateWorkflowRequestDto
   ): Promise<WorkflowResponse> {
-    return this.createWorkflowUsecase.execute(
+    // Use environmentId from user session since CreateWorkflowQuery doesn't have environmentId
+    const environmentId = user.environmentId;
+    
+    // Validate required fields
+    if (!body.notificationGroupId) {
+      throw new ConflictException('Notification group ID is required.');
+    }
+    
+    // Duplicate validation
+    const existing = await this.notificationTemplateRepository.findOne({
+      _organizationId: user.organizationId,
+      channel: body.channel,
+      language: body.language,
+    });
+    if (existing) {
+      throw new ConflictException('A template for this channel and language already exists.');
+    }
+    const result = await this.createWorkflowUsecase.execute(
       CreateWorkflowCommand.create({
         organizationId: user.organizationId,
         userId: user._id,
-        environmentId: user.environmentId,
+        environmentId, // use the resolved environmentId
         name: body.name,
         tags: body.tags,
         description: body.description,
@@ -210,6 +231,8 @@ export class NotificationTemplateController {
         origin: WorkflowOriginEnum.NOVU_CLOUD,
       })
     );
+    // Add language to the response
+    return { ...result, language: body.language };
   }
 
   @Put('/:templateId/status')
@@ -234,6 +257,6 @@ export class NotificationTemplateController {
         active: body.active,
         templateId,
       })
-    );
+    ).then(result => ({ ...result, language: (result as any).language ?? null }));
   }
 }
