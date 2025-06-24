@@ -1,4 +1,4 @@
-import { JobTitleEnum } from '../../types';
+import { JobTitleEnum, ChannelTypeEnum } from '../../types';
 
 export interface ICreateOrganizationDto {
   name: string;
@@ -7,6 +7,7 @@ export interface ICreateOrganizationDto {
   jobTitle?: JobTitleEnum;
   domain?: string;
   language?: string[];
+  channels?: ChannelTypeEnum[];
   frontend?: string[];
 }
 

@@ -1,6 +1,6 @@
-import { IsDefined, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsDefined, IsEnum, IsOptional, IsString, IsArray } from 'class-validator';
 
-import { ApiServiceLevelEnum, JobTitleEnum } from '@novu/shared';
+import { ApiServiceLevelEnum, JobTitleEnum, ChannelTypeEnum } from '@novu/shared';
 
 import { AuthenticatedCommand } from '../../../shared/commands/authenticated.command';
 
@@ -22,7 +22,13 @@ export class CreateOrganizationCommand extends AuthenticatedCommand {
   domain?: string;
 
   @IsOptional()
+  @IsArray()
   language?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsEnum(ChannelTypeEnum, { each: true })
+  channels?: ChannelTypeEnum[];
 
   @IsOptional()
   @IsEnum(ApiServiceLevelEnum)

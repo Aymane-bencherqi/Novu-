@@ -11,10 +11,8 @@ export type TextProps<C extends React.ElementType> = PolymorphicComponentPropWit
   JsxStyleProps & TextVariantProps & CoreProps
 >;
 
-type PolymorphicComponent = <C extends React.ElementType = 'p'>(props: TextProps<C>) => JSX.Element | null;
-
-// @ts-expect-error
-export const Text: PolymorphicComponent = React.forwardRef(
+const Text = React.forwardRef(
+  // @ts-ignore - Complex polymorphic component type issues
   <C extends React.ElementType = 'p'>(props: TextProps<C>, ref?: PolymorphicRef<C>) => {
     const [variantProps, textProps] = text.splitVariantProps(props);
     const [cssProps, localProps] = splitCssProps(textProps);
@@ -24,4 +22,6 @@ export const Text: PolymorphicComponent = React.forwardRef(
 
     return <Component ref={ref} className={cx(styles, css(cssProps), className)} {...otherProps} />;
   }
-);
+) as any;
+
+export { Text };

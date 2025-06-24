@@ -29,18 +29,14 @@ export type LoadingOverlayProps<C extends React.ElementType = LoadingOverlayDefa
     JsxStyleProps & Partial<LoadingOverlayVariant> & CoreProps & LoadingOverlayCoreProps
   >;
 
-type PolymorphicComponent = <C extends React.ElementType = LoadingOverlayDefaultElement>(
-  props: LoadingOverlayProps<C>
-) => JSX.Element | null;
-
 /**
  * Loader with overlay.
  *
  * TODO: Add support for container-scoped loader. For now, only full-page works.
  * To work around this, use position: relative in the parent component
  */
-// @ts-expect-error
-export const LoadingOverlay: PolymorphicComponent = React.forwardRef(
+const LoadingOverlay = React.forwardRef(
+  // @ts-ignore - Complex polymorphic component type issues
   <C extends React.ElementType = LoadingOverlayDefaultElement>(
     { variant, isVisible = true, size = DEFAULT_SIZE, zIndex = DEFAULT_Z_INDEX, ...props }: LoadingOverlayProps<C>,
     ref?: PolymorphicRef<C>
@@ -75,4 +71,6 @@ export const LoadingOverlay: PolymorphicComponent = React.forwardRef(
       />
     );
   }
-);
+) as any;
+
+export { LoadingOverlay };

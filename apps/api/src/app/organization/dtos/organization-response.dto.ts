@@ -2,6 +2,7 @@ import { PartnerTypeEnum, DirectionEnum } from '@novu/dal';
 import { IsObject, IsArray, IsString, IsEnum } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UpdateBrandingDetailsDto } from './update-branding-details.dto';
+import { ChannelTypeEnum } from '@novu/shared';
 
 export class IPartnerConfigurationResponseDto {
   @ApiPropertyOptional()
@@ -53,4 +54,21 @@ export class OrganizationResponseDto {
   @ApiPropertyOptional()
   @IsObject()
   partnerConfigurations: IPartnerConfigurationResponseDto[];
+
+  @ApiPropertyOptional({
+    type: [String],
+    enum: Object.values(ChannelTypeEnum),
+    description: 'Supported notification channels for this organization',
+  })
+  @IsArray()
+  @IsEnum(ChannelTypeEnum, { each: true })
+  channels?: ChannelTypeEnum[];
+
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Supported languages for this organization',
+  })
+  @IsArray()
+  @IsString({ each: true })
+  language?: string[];
 }

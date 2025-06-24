@@ -32,6 +32,7 @@ export class CreateOrganization {
       apiServiceLevel: command.apiServiceLevel || ApiServiceLevelEnum.FREE,
       domain: command.domain,
       language: command.language,
+      channels: command.channels,
     });
 
     if (command.jobTitle) {
@@ -70,6 +71,7 @@ export class CreateOrganization {
     this.analyticsService.track('[Authentication] - Create Organization', user._id, {
       _organization: createdOrganization._id,
       language: command.language,
+      channels: command.channels,
       creatorJobTitle: command.jobTitle,
     });
 

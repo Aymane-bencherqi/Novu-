@@ -80,6 +80,7 @@ export class OrganizationController {
         jobTitle: body.jobTitle,
         domain: body.domain,
         language: body.language,
+        channels: body.channels,
       })
     );
   }

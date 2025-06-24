@@ -1,4 +1,4 @@
-import { ApiServiceLevelEnum, ProductUseCases } from '../../types';
+import { ApiServiceLevelEnum, ProductUseCases, ChannelTypeEnum } from '../../types';
 
 export interface IOrganizationEntity {
   _id: string;
@@ -16,6 +16,7 @@ export interface IOrganizationEntity {
   domain?: string;
   productUseCases?: ProductUseCases;
   language?: string[];
+  channels?: ChannelTypeEnum[];
   createdAt: string;
   updatedAt: string;
   externalId?: string;

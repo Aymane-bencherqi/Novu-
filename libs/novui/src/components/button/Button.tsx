@@ -30,39 +30,36 @@ export type ButtonProps<C extends React.ElementType = ButtonDefaultElement> = Po
   JsxStyleProps & Partial<ButtonVariant> & CoreProps & ButtonCoreProps
 >;
 
-type PolymorphicComponent = <C extends React.ElementType = ButtonDefaultElement>(
-  props: ButtonProps<C>
-) => JSX.Element | null;
+const ButtonComponent = <C extends React.ElementType = ButtonDefaultElement>(
+  { variant = DEFAULT_VARIANT, size = DEFAULT_SIZE, ...props }: ButtonProps<C>,
+  ref?: PolymorphicRef<C>
+) => {
+  const [variantProps, buttonProps] = button.splitVariantProps({ ...props, variant, size });
+  const [cssProps, localProps] = splitCssProps(buttonProps);
+  const { className, as, Icon, children, ...otherProps } = localProps;
+  const styles = button(variantProps);
 
-// @ts-expect-error
-export const Button: PolymorphicComponent = React.forwardRef(
-  <C extends React.ElementType = ButtonDefaultElement>(
-    { variant = DEFAULT_VARIANT, size = DEFAULT_SIZE, ...props }: ButtonProps<C>,
-    ref?: PolymorphicRef<C>
-  ) => {
-    const [variantProps, buttonProps] = button.splitVariantProps({ ...props, variant, size });
-    const [cssProps, localProps] = splitCssProps(buttonProps);
-    const { className, as, Icon, children, ...otherProps } = localProps;
-    const styles = button(variantProps);
+  return (
+    <ExternalButton
+      ref={ref}
+      component={as ?? 'button'}
+      size={BUTTON_SIZE_TO_EXTERNAL_BUTTON_SIZE[size]}
+      variant={BUTTON_VARIANT_TO_EXTERNAL_BUTTON_VARIANT[variant]}
+      leftSection={
+        Icon ? (
+          <Icon title="button-icon" size={variant === 'transparent' ? '20' : BUTTON_SIZE_TO_ICON_SIZE[size]} />
+        ) : undefined
+      }
+      classNames={styles}
+      className={cx(css(cssProps), className)}
+      fullWidth={Boolean(variantProps.fullWidth)}
+      {...otherProps}
+    >
+      {children}
+    </ExternalButton>
+  );
+};
 
-    return (
-      <ExternalButton
-        ref={ref}
-        component={as ?? 'button'}
-        size={BUTTON_SIZE_TO_EXTERNAL_BUTTON_SIZE[size]}
-        variant={BUTTON_VARIANT_TO_EXTERNAL_BUTTON_VARIANT[variant]}
-        leftSection={
-          Icon ? (
-            <Icon title="button-icon" size={variant === 'transparent' ? '20' : BUTTON_SIZE_TO_ICON_SIZE[size]} />
-          ) : undefined
-        }
-        classNames={styles}
-        className={cx(css(cssProps), className)}
-        fullWidth={Boolean(variantProps.fullWidth)}
-        {...otherProps}
-      >
-        {children}
-      </ExternalButton>
-    );
-  }
-);
+export const Button = React.forwardRef(ButtonComponent) as React.ForwardRefExoticComponent<
+  ButtonProps & { ref?: React.Ref<HTMLButtonElement> }
+>;

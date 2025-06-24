@@ -1,4 +1,4 @@
-import { ApiServiceLevelEnum, IOrganizationEntity, ProductUseCases } from '@novu/shared';
+import { ApiServiceLevelEnum, IOrganizationEntity, ProductUseCases, ChannelTypeEnum } from '@novu/shared';
 
 export class OrganizationEntity implements IOrganizationEntity {
   _id: string;
@@ -21,6 +21,8 @@ export class OrganizationEntity implements IOrganizationEntity {
   productUseCases?: ProductUseCases;
 
   language?: string[];
+
+  channels?: ChannelTypeEnum[];
 
   createdAt: string;
 

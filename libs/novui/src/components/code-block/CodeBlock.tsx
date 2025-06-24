@@ -21,10 +21,6 @@ export type CodeBlockProps<C extends React.ElementType> = PolymorphicComponentPr
   JsxStyleProps & CodeBlockVariantProps & CoreProps & CodeBlockCoreProps
 >;
 
-type PolymorphicComponent = <C extends React.ElementType = CodeBlockElement>(
-  props: CodeBlockProps<C>
-) => JSX.Element | null;
-
 /**
  * @deprecated This is not actually deprecated but needs more work to be styled properly and align with our use cases.
  *
@@ -33,24 +29,24 @@ type PolymorphicComponent = <C extends React.ElementType = CodeBlockElement>(
  * - no line numbers are built-in to Highlight JS
  *
  */
-// @ts-expect-error
-export const CodeBlock: PolymorphicComponent = React.forwardRef(
-  <C extends React.ElementType = CodeBlockElement>(props: CodeBlockProps<C>, ref?: PolymorphicRef<C>) => {
-    const [variantProps, codeBlockProps] = codeBlock.splitVariantProps(props);
-    const [cssProps, localProps] = splitCssProps(codeBlockProps);
-    const { className, as, code, ...otherProps } = localProps;
-    const classNames = codeBlock(variantProps);
-    const Component = props.as || DEFAULT_CODE_BLOCK_ELEMENT;
+const CodeBlockComponent = <C extends React.ElementType = CodeBlockElement>(props: CodeBlockProps<C>, ref?: PolymorphicRef<C>) => {
+  const [variantProps, codeBlockProps] = codeBlock.splitVariantProps(props);
+  const [cssProps, localProps] = splitCssProps(codeBlockProps);
+  const { className, as, code, ...otherProps } = localProps;
+  const classNames = codeBlock(variantProps);
+  const Component = props.as || DEFAULT_CODE_BLOCK_ELEMENT;
 
-    return (
-      <ExternalCode
-        ref={ref}
-        component={Component}
-        classNames={classNames}
-        className={cx(css(cssProps), className)}
-        code={code}
-        {...otherProps}
-      />
-    );
-  }
-);
+  return (
+    <ExternalCode
+      ref={ref}
+      component={Component}
+      classNames={classNames}
+      className={cx(css(cssProps), className)}
+      code={code}
+      {...otherProps}
+    />
+  );
+};
+
+// @ts-ignore - Complex polymorphic component type issues
+export const CodeBlock = React.forwardRef(CodeBlockComponent) as any;

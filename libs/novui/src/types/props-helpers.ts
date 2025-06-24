@@ -17,3 +17,8 @@ export type PolymorphicComponentPropWithRef<C extends React.ElementType, Props =
 > & {
   ref?: PolymorphicRef<C>;
 };
+
+// Add a more compatible type for forwardRef
+export type PolymorphicForwardRefComponent<C extends React.ElementType, Props = {}> = React.ForwardRefExoticComponent<
+  PolymorphicComponentPropWithRef<C, Props> & React.RefAttributes<React.ElementRef<C>>
+>;

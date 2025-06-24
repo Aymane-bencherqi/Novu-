@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { ApiServiceLevelEnum } from '@novu/shared';
+import { ApiServiceLevelEnum, ChannelTypeEnum } from '@novu/shared';
 
 import { schemaOptions } from '../schema-default.options';
 import { OrganizationDBModel, PartnerTypeEnum } from './organization.entity';
@@ -38,6 +38,10 @@ const organizationSchema = new Schema<OrganizationDBModel>(
     defaultLocale: Schema.Types.String,
     domain: Schema.Types.String,
     language: [Schema.Types.String],
+    channels: [{
+      type: Schema.Types.String,
+      enum: Object.values(ChannelTypeEnum),
+    }],
     productUseCases: {
       delay: {
         type: Schema.Types.Boolean,

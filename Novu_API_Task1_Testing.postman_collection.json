@@ -1,0 +1,209 @@
+{
+  "info": {
+    "name": "Novu API - Task 1 Testing",
+    "description": "Postman collection for testing Task 1: Create instance (organization) with channel/language selection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Task 1: Create Organization with Channels and Languages",
+      "item": [
+        {
+          "name": "1. Create Organization - Basic (No channels/languages)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Organization Basic\",\n  \"logo\": \"https://example.com/logo.png\",\n  \"domain\": \"test-org.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations"]
+            },
+            "description": "Create an organization without specifying channels or languages (backward compatibility test)"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Create Organization - With Languages Only",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Organization Languages\",\n  \"logo\": \"https://example.com/logo.png\",\n  \"domain\": \"test-org-lang.com\",\n  \"language\": [\"en\", \"fr\", \"ar\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations"]
+            },
+            "description": "Create an organization with language preferences (EN, FR, AR)"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Create Organization - With Channels Only",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Organization Channels\",\n  \"logo\": \"https://example.com/logo.png\",\n  \"domain\": \"test-org-channels.com\",\n  \"channels\": [\"email\", \"sms\", \"push\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations"]
+            },
+            "description": "Create an organization with channel preferences (Email, SMS, Push)"
+          },
+          "response": []
+        },
+        {
+          "name": "4. Create Organization - With Both Channels and Languages",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Organization Complete\",\n  \"logo\": \"https://example.com/logo.png\",\n  \"domain\": \"test-org-complete.com\",\n  \"language\": [\"en\", \"fr\", \"ar\"],\n  \"channels\": [\"email\", \"sms\", \"push\", \"in_app\", \"chat\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations"]
+            },
+            "description": "Create an organization with both channel and language preferences (Task 1 main test)"
+          },
+          "response": []
+        },
+        {
+          "name": "5. Create Organization - Invalid Channel Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Organization Invalid\",\n  \"logo\": \"https://example.com/logo.png\",\n  \"domain\": \"test-org-invalid.com\",\n  \"language\": [\"en\"],\n  \"channels\": [\"invalid_channel\", \"email\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations"]
+            },
+            "description": "Test validation - should fail with invalid channel type"
+          },
+          "response": []
+        },
+        {
+          "name": "6. Get Organization Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "me"]
+            },
+            "description": "Get current organization details to verify channels and languages are saved"
+          },
+          "response": []
+        },
+        {
+          "name": "7. List All Organizations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations"]
+            },
+            "description": "List all organizations to see the created organizations with their channels and languages"
+          },
+          "response": []
+        }
+      ],
+      "description": "Test cases for Task 1: Create instance (organization) with channel/language selection"
+    },
+    {
+      "name": "Authentication Setup",
+      "item": [
+        {
+          "name": "Get Auth Token (if needed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"your-email@example.com\",\n  \"password\": \"your-password\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login to get authentication token (update with your credentials)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Authentication setup for testing"
+    }
+  ]
+} 

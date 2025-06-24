@@ -21,10 +21,8 @@ const VARIANT_ELEMENT_LOOKUP: Record<TitleVariant, Extract<ElementType, 'h1' | '
 
 const DEFAULT_VARIANT: TitleVariant = 'page';
 
-type PolymorphicComponent = <C extends React.ElementType = 'h1'>(props: TitleProps<C>) => JSX.Element | null;
-
-// @ts-expect-error
-export const Title: PolymorphicComponent = React.forwardRef(
+const Title = React.forwardRef(
+  // @ts-ignore - Complex polymorphic component type issues
   <C extends React.ElementType = 'h1'>(props: TitleProps<C>, ref?: PolymorphicRef<C>) => {
     const [variantProps, titleProps] = title.splitVariantProps(props);
     const [cssProps, localProps] = splitCssProps(titleProps);
@@ -34,4 +32,6 @@ export const Title: PolymorphicComponent = React.forwardRef(
 
     return <Component ref={ref} className={cx(styles, css(cssProps), className)} {...otherProps} />;
   }
-);
+) as any;
+
+export { Title };
