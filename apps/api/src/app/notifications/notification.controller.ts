@@ -1,5 +1,5 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiTags, ApiExcludeEndpoint } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags, ApiExcludeEndpoint, ApiHeader } from '@nestjs/swagger';
 import { ChannelTypeEnum, PermissionsEnum, UserSessionData } from '@novu/shared';
 
 import { RequirePermissions } from '@novu/application-generic';
@@ -7,6 +7,7 @@ import { ActivitiesRequestDto } from './dtos/activities-request.dto';
 import { ActivitiesResponseDto, ActivityNotificationResponseDto } from './dtos/activities-response.dto';
 import { ActivityGraphStatesResponse } from './dtos/activity-graph-states-response.dto';
 import { ActivityStatsResponseDto } from './dtos/activity-stats-response.dto';
+import { CreateNotificationDto, CreateNotificationResponseDto } from './dtos/create-notification.dto';
 import { GetActivityFeedCommand } from './usecases/get-activity-feed/get-activity-feed.command';
 import { GetActivityFeed } from './usecases/get-activity-feed/get-activity-feed.usecase';
 import { GetActivityGraphStatsCommand } from './usecases/get-activity-graph-states/get-activity-graph-states.command';
@@ -14,6 +15,8 @@ import { GetActivityGraphStats } from './usecases/get-activity-graph-states/get-
 import { GetActivityStats, GetActivityStatsCommand } from './usecases/get-activity-stats';
 import { GetActivityCommand } from './usecases/get-activity/get-activity.command';
 import { GetActivity } from './usecases/get-activity/get-activity.usecase';
+import { CreateNotificationCommand } from './usecases/create-notification/create-notification.command';
+import { CreateNotification } from './usecases/create-notification/create-notification.usecase';
 
 import { ExternalApiAccessible } from '../auth/framework/external-api.decorator';
 import { ApiCommonResponses, ApiOkResponse, ApiResponse } from '../shared/framework/response.decorator';
@@ -30,8 +33,42 @@ export class NotificationsController {
     private getActivityFeedUsecase: GetActivityFeed,
     private getActivityStatsUsecase: GetActivityStats,
     private getActivityGraphStatsUsecase: GetActivityGraphStats,
-    private getActivityUsecase: GetActivity
+    private getActivityUsecase: GetActivity,
+    private createNotificationUsecase: CreateNotification
   ) {}
+
+  @Post('')
+  @ApiResponse(CreateNotificationResponseDto, 201)
+  @ApiOperation({
+    summary: 'Create notification via form',
+    description: `Create and send a notification through form-based input. 
+    This endpoint allows you to send notifications with custom content, recipients, and channel preferences.
+    The notification can be sent immediately or scheduled for later delivery.`,
+  })
+  @ApiHeader({
+    name: 'Novu-Environment-Id',
+    description: 'The environment ID to use for this request',
+    required: true,
+    schema: { type: 'string' },
+  })
+  @ExternalApiAccessible()
+  @RequirePermissions(PermissionsEnum.EVENT_WRITE)
+  async createNotification(
+    @UserSession() user: UserSessionData,
+    @Body() body: CreateNotificationDto
+  ): Promise<CreateNotificationResponseDto> {
+    if (!user.environmentId) {
+      throw new Error('Missing environmentId in header (Novu-Environment-Id)');
+    }
+    return this.createNotificationUsecase.execute(
+      CreateNotificationCommand.create({
+        ...body,
+        userId: user._id,
+        organizationId: user.organizationId,
+        environmentId: user.environmentId,
+      })
+    );
+  }
 
   @Get('')
   @ApiOkResponse({

@@ -1,0 +1,297 @@
+{
+  "info": {
+    "name": "Task 6 - Create Notification via Form",
+    "description": "Postman collection for testing the new form-based notification creation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:1336",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "YOUR_AUTH_TOKEN_HERE",
+      "type": "string"
+    },
+    {
+      "key": "organizationId",
+      "value": "YOUR_ORGANIZATION_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "environmentId",
+      "value": "YOUR_ENVIRONMENT_ID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "subscriberId",
+      "value": "test-subscriber-123",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create Email Notification",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Welcome Email Notification\",\n  \"content\": {\n    \"email\": {\n      \"subject\": \"Welcome to our platform!\",\n      \"htmlContent\": \"<h1>Welcome {{firstName}}!</h1><p>Thank you for joining our platform. We're excited to have you on board!</p><p>Best regards,<br>The Team</p>\",\n      \"textContent\": \"Welcome! Thank you for joining our platform. We're excited to have you on board! Best regards, The Team\"\n    }\n  },\n  \"recipients\": [\n    {\n      \"subscriberId\": \"{{subscriberId}}\"\n    }\n  ],\n  \"channels\": [\"email\"],\n  \"metadata\": {\n    \"source\": \"form-api\",\n    \"campaign\": \"welcome-series\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/notifications",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "notifications"]
+        },
+        "description": "Create a simple email notification with HTML and text content"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Create SMS Notification",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"SMS Alert Notification\",\n  \"content\": {\n    \"sms\": {\n      \"content\": \"Hi {{firstName}}! Your order #{{orderId}} has been shipped. Track it at {{trackingUrl}}\"\n    }\n  },\n  \"recipients\": [\n    {\n      \"subscriberId\": \"{{subscriberId}}\"\n    }\n  ],\n  \"channels\": [\"sms\"],\n  \"metadata\": {\n    \"source\": \"form-api\",\n    \"type\": \"order-update\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/notifications",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "notifications"]
+        },
+        "description": "Create an SMS notification with dynamic content"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Create Multi-Channel Notification",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Multi-Channel Announcement\",\n  \"content\": {\n    \"email\": {\n      \"subject\": \"Important Announcement\",\n      \"htmlContent\": \"<h1>Important Update</h1><p>Dear {{firstName}},</p><p>We have an important announcement regarding our service.</p><p>Please check your dashboard for more details.</p>\",\n      \"textContent\": \"Important Update - Dear {{firstName}}, We have an important announcement regarding our service. Please check your dashboard for more details.\"\n    },\n    \"sms\": {\n      \"content\": \"Important: Service update available. Check your email for details.\"\n    },\n    \"push\": {\n      \"title\": \"Service Update\",\n      \"body\": \"Important announcement available. Tap to view details.\",\n      \"data\": {\n        \"url\": \"/dashboard/announcements\",\n        \"action\": \"view_announcement\"\n      }\n    }\n  },\n  \"recipients\": [\n    {\n      \"subscriberId\": \"{{subscriberId}}\"\n    }\n  ],\n  \"channels\": [\"email\", \"sms\", \"push\"],\n  \"metadata\": {\n    \"source\": \"form-api\",\n    \"priority\": \"high\",\n    \"category\": \"announcement\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/notifications",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "notifications"]
+        },
+        "description": "Create a notification that will be sent via email, SMS, and push channels"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Create In-App Notification",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"In-App Welcome Message\",\n  \"content\": {\n    \"in_app\": {\n      \"title\": \"Welcome aboard!\",\n      \"content\": \"Hi {{firstName}}! Welcome to our platform. We're glad to have you here.\",\n      \"cta\": {\n        \"type\": \"redirect\",\n        \"data\": {\n          \"url\": \"/onboarding\"\n        }\n      }\n    }\n  },\n  \"recipients\": [\n    {\n      \"subscriberId\": \"{{subscriberId}}\"\n    }\n  ],\n  \"channels\": [\"in_app\"],\n  \"metadata\": {\n    \"source\": \"form-api\",\n    \"type\": \"onboarding\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/notifications",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "notifications"]
+        },
+        "description": "Create an in-app notification with call-to-action button"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Create Scheduled Notification",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Scheduled Reminder\",\n  \"content\": {\n    \"email\": {\n      \"subject\": \"Don't forget your appointment\",\n      \"htmlContent\": \"<h1>Appointment Reminder</h1><p>Hi {{firstName}},</p><p>This is a friendly reminder about your upcoming appointment tomorrow at {{appointmentTime}}.</p><p>Please arrive 10 minutes early.</p>\",\n      \"textContent\": \"Appointment Reminder - Hi {{firstName}}, This is a friendly reminder about your upcoming appointment tomorrow at {{appointmentTime}}. Please arrive 10 minutes early.\"\n    }\n  },\n  \"recipients\": [\n    {\n      \"subscriberId\": \"{{subscriberId}}\"\n    }\n  ],\n  \"channels\": [\"email\"],\n  \"scheduledAt\": \"2024-01-15T10:00:00Z\",\n  \"immediate\": false,\n  \"metadata\": {\n    \"source\": \"form-api\",\n    \"type\": \"appointment-reminder\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/notifications",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "notifications"]
+        },
+        "description": "Create a scheduled notification that will be sent at a specific time"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Create Notification with Multiple Recipients",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Bulk Newsletter\",\n  \"content\": {\n    \"email\": {\n      \"subject\": \"Weekly Newsletter - {{weekNumber}}\",\n      \"htmlContent\": \"<h1>Weekly Newsletter</h1><p>Hi {{firstName}},</p><p>Here's what's new this week:</p><ul><li>Feature updates</li><li>Community highlights</li><li>Upcoming events</li></ul><p>Thanks for being part of our community!</p>\",\n      \"textContent\": \"Weekly Newsletter - Hi {{firstName}}, Here's what's new this week: Feature updates, Community highlights, Upcoming events. Thanks for being part of our community!\"\n    }\n  },\n  \"recipients\": [\n    {\n      \"subscriberId\": \"subscriber-1\"\n    },\n    {\n      \"subscriberId\": \"subscriber-2\"\n    },\n    {\n      \"subscriberId\": \"subscriber-3\"\n    }\n  ],\n  \"channels\": [\"email\"],\n  \"metadata\": {\n    \"source\": \"form-api\",\n    \"type\": \"newsletter\",\n    \"campaign\": \"weekly-newsletter\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/notifications",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "notifications"]
+        },
+        "description": "Create a notification that will be sent to multiple recipients"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Test Validation - Missing Title",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": {\n    \"email\": {\n      \"subject\": \"Test\",\n      \"htmlContent\": \"<p>Test</p>\"\n    }\n  },\n  \"recipients\": [\n    {\n      \"subscriberId\": \"{{subscriberId}}\"\n    }\n  ],\n  \"channels\": [\"email\"]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/notifications",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "notifications"]
+        },
+        "description": "Test validation error when title is missing"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Test Validation - Missing Content",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Test Notification\",\n  \"recipients\": [\n    {\n      \"subscriberId\": \"{{subscriberId}}\"\n    }\n  ],\n  \"channels\": [\"email\"]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/notifications",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "notifications"]
+        },
+        "description": "Test validation error when content is missing"
+      },
+      "response": []
+    },
+    {
+      "name": "9. Test Validation - Non-existent Subscriber",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Test Notification\",\n  \"content\": {\n    \"email\": {\n      \"subject\": \"Test\",\n      \"htmlContent\": \"<p>Test</p>\"\n    }\n  },\n  \"recipients\": [\n    {\n      \"subscriberId\": \"non-existent-subscriber\"\n    }\n  ],\n  \"channels\": [\"email\"]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/notifications",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "notifications"]
+        },
+        "description": "Test validation error when subscriber doesn't exist"
+      },
+      "response": []
+    }
+  ]
+} 
