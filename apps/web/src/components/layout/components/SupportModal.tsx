@@ -56,7 +56,7 @@ export const SupportModal: FC<SupportModalProps> = ({ isOpen, toggleOpen }) => {
                 minRows={8}
                 onChange={onChange}
                 value={value}
-                className={css({ marginBottom: '20px' })}
+                className={css({ marginBottom: '100' })}
               />
             )}
           />

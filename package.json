@@ -88,6 +88,7 @@
     "@types/eslint__js": "^8.42.3",
     "@types/inquirer": "8.2.10",
     "@types/jest": "29.5.13",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "18.16.9",
     "@typescript-eslint/eslint-plugin": "^8.13.0",
     "@typescript-eslint/utils": "^8.13.0",
@@ -212,6 +213,8 @@
     "pnpm": "^10.0.0"
   },
   "dependencies": {
+    "@nestjs/mongoose": "^11.0.3",
+    "mongoose": "^7.8.7",
     "tslib": "^2.4.0"
   },
   "pnpm": {

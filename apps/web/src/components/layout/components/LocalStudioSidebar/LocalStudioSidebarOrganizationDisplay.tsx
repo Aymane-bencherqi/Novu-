@@ -32,8 +32,8 @@ export const LocalStudioSidebarOrganizationDisplay: FC<LocalStudioSidebarOrganiz
           <img
             src={`/static/images/standalone-${colorScheme}-theme.svg`}
             className={css({
-              w: '37px',
-              h: '37px',
+              w: '225',
+              h: '225',
               borderRadius: '100',
             })}
           />

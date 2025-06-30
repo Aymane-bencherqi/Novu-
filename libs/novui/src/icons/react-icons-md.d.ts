@@ -2312,7 +2312,7 @@ declare module 'react-icons/md' {
   export declare const MdOutlineCreditCard: NovuIconType;
   export declare const MdOutlineCss: NovuIconType;
   export declare const MdOutlineCurrencyExchange: NovuIconType;
-  export declare const MdOutlineangerous: NovuIconType;
+  export declare const MdOutlineDangerous: NovuIconType;
   export declare const MdOutlineashboardCustomize: NovuIconType;
   export declare const MdOutlineashboard: NovuIconType;
   export declare const MdOutlineataExploration: NovuIconType;
@@ -2928,7 +2928,7 @@ declare module 'react-icons/md' {
   export declare const MdOutlineeleteSweep: NovuIconType;
   export declare const MdOutlineeselect: NovuIconType;
   export declare const MdOutlinerafts: NovuIconType;
-  export declare const MdOutlineynamicFeed: NovuIconType;
+  export declare const MdOutlineDynamicFeed: NovuIconType;
   export declare const MdOutlineFileCopy: NovuIconType;
   export declare const MdOutlineFilterListOff: NovuIconType;
   export declare const MdOutlineFilterList: NovuIconType;
@@ -3038,7 +3038,7 @@ declare module 'react-icons/md' {
   export declare const MdOutlineevices: NovuIconType;
   export declare const MdOutlineiscount: NovuIconType;
   export declare const MdOutlineoNotDisturbOnTotalSilence: NovuIconType;
-  export declare const MdOutlinevr: NovuIconType;
+  export declare const MdOutlineDvr: NovuIconType;
   export declare const MdOutlineEMobiledata: NovuIconType;
   export declare const MdOutlineEdgesensorHigh: NovuIconType;
   export declare const MdOutlineEdgesensorLow: NovuIconType;

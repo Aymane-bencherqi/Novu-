@@ -42,7 +42,7 @@ problematicIcons.forEach(icon => console.log(icon));
 // Also check for icons that might not exist
 console.log('\nChecking for potentially non-existent icons...');
 const testIcons = [
-  'Md3DRotation',
+  'Md3dRotation',
   'Md3dRotation', 
   'MdOutlineSurroundSound',
   'MdOutlineSurroundSound'

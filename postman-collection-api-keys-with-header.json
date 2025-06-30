@@ -1,0 +1,131 @@
+{
+  "info": {
+    "name": "Novu API Keys with Environment Header",
+    "description": "Test collection for API key endpoints with x-environment-id header support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "your-jwt-token-here",
+      "type": "string"
+    },
+    {
+      "key": "environmentId",
+      "value": "your-environment-id-here",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Get API Keys (Default Environment)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/environments/api-keys",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "environments", "api-keys"]
+        },
+        "description": "Get API keys for the user's default environment"
+      }
+    },
+    {
+      "name": "Get API Keys (Specific Environment)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "x-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/environments/api-keys",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "environments", "api-keys"]
+        },
+        "description": "Get API keys for a specific environment using x-environment-id header"
+      }
+    },
+    {
+      "name": "Regenerate API Keys (Default Environment)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/environments/api-keys/regenerate",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "environments", "api-keys", "regenerate"]
+        },
+        "description": "Regenerate API keys for the user's default environment"
+      }
+    },
+    {
+      "name": "Regenerate API Keys (Specific Environment)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          },
+          {
+            "key": "x-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/environments/api-keys/regenerate",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "environments", "api-keys", "regenerate"]
+        },
+        "description": "Regenerate API keys for a specific environment using x-environment-id header"
+      }
+    },
+    {
+      "name": "List Environments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{authToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/v1/environments",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "environments"]
+        },
+        "description": "List all environments to get environment IDs for testing"
+      }
+    }
+  ]
+} 

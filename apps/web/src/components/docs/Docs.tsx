@@ -50,7 +50,7 @@ export const Docs = ({
         id={DOCS_WRAPPER_ELEMENT_ID}
         gap="75"
         className={css({
-          textAlign: 'justify left',
+          textAlign: 'justify',
         })}
       >
         <When truthy={!isChildDocs}>
@@ -59,7 +59,7 @@ export const Docs = ({
               <Title
                 variant="page"
                 className={css({
-                  width: '99%',
+                  width: 'full',
                 })}
               >
                 {title}

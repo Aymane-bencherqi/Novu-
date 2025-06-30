@@ -20,7 +20,7 @@ export const LocalStudioHeader: FC = () => {
       height={`${HEADER_NAV_HEIGHT}px`}
       className={css({
         position: 'sticky',
-        top: 0,
+        top: '0',
         borderBottom: 'none !important',
         zIndex: 'docked !important', // !important is necessary to override Mantine's z-index
         padding: '50',

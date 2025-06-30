@@ -32,17 +32,17 @@ export const HrefButton: FCBase = () => {
       <HStack
         className={cx(
           css({
-            fontSize: '14px',
+            fontSize: '88',
             fontStyle: 'normal',
-            fontWeight: '600',
-            lineHeight: '20px',
+            fontWeight: 'strong',
+            lineHeight: '125',
             bg: 'transparent',
             justifyContent: 'center',
-            borderColor: 'rgb(48, 164, 108)',
+            borderColor: 'legacy.success',
             border: 'solid',
-            borderRadius: '8px',
-            padding: '8px 16px 8px 16px',
-            color: { base: '#525266', _dark: 'white' },
+            borderRadius: '100',
+            padding: '50 100 50 100',
+            color: { base: 'legacy.B40', _dark: 'legacy.white' },
           })
         )}
       >

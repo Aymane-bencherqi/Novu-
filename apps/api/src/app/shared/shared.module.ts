@@ -27,6 +27,7 @@ import {
   TopicSubscribersRepository,
   UserRepository,
   WorkflowOverrideRepository,
+  TechnicalAlertRepository,
 } from '@novu/dal';
 import {
   analyticsService,
@@ -98,6 +99,7 @@ const DAL_MODELS = [
   WorkflowOverrideRepository,
   ControlValuesRepository,
   PreferencesRepository,
+  TechnicalAlertRepository,
 ];
 
 const dalService = {

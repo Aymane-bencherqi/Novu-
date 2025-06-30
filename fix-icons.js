@@ -6,7 +6,7 @@ let content = fs.readFileSync(filePath, 'utf8');
 
 // Fix malformed MdOutline names
 const replacements = [
-  ['MdOutlineangerous', 'MdOutlineDangerous'],
+  ['MdOutlineDangerous', 'MdOutlineDangerous'],
   ['MdOutlineashboardCustomize', 'MdOutlineDashboardCustomize'],
   ['MdOutlineashboard', 'MdOutlineDashboard'],
   ['MdOutlineataExploration', 'MdOutlineDataExploration'],

@@ -117,7 +117,7 @@ export const BridgeUpdateModal: FC<BridgeUpdateModalProps> = ({ isOpen, toggleOp
             disabled={isLoading}
             variant="preventLayoutShift"
             error={urlError}
-            className={css({ marginBottom: '16px' })}
+            className={css({ marginBottom: '100' })}
           />
           <HStack justify={'space-between'}>
             <div>

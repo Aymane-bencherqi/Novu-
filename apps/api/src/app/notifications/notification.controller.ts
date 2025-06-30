@@ -17,6 +17,8 @@ import { GetActivityCommand } from './usecases/get-activity/get-activity.command
 import { GetActivity } from './usecases/get-activity/get-activity.usecase';
 import { CreateNotificationCommand } from './usecases/create-notification/create-notification.command';
 import { CreateNotification } from './usecases/create-notification/create-notification.usecase';
+import { NotificationKpiResponseDto } from './dtos/notification-kpi-response.dto';
+import { GetNotificationKpi } from './usecases/get-notification-kpi/get-notification-kpi.usecase';
 
 import { ExternalApiAccessible } from '../auth/framework/external-api.decorator';
 import { ApiCommonResponses, ApiOkResponse, ApiResponse } from '../shared/framework/response.decorator';
@@ -34,7 +36,8 @@ export class NotificationsController {
     private getActivityStatsUsecase: GetActivityStats,
     private getActivityGraphStatsUsecase: GetActivityGraphStats,
     private getActivityUsecase: GetActivity,
-    private createNotificationUsecase: CreateNotification
+    private createNotificationUsecase: CreateNotification,
+    private getNotificationKpi: GetNotificationKpi,
   ) {}
 
   @Post('')
@@ -178,6 +181,14 @@ export class NotificationsController {
         userId: user._id,
       })
     );
+  }
+
+  @Get('/kpi')
+  @ApiOkResponse({ type: NotificationKpiResponseDto })
+  @ApiOperation({ summary: 'Get notification KPIs/statistics', description: 'Returns key performance indicators and statistics for notifications.' })
+  @RequirePermissions(PermissionsEnum.NOTIFICATION_READ)
+  async getKpi(@UserSession() user: UserSessionData): Promise<NotificationKpiResponseDto> {
+    return this.getNotificationKpi.execute(user.environmentId, user.organizationId);
   }
 
   @Get('/:notificationId')

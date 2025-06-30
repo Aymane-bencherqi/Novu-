@@ -4,10 +4,12 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   Post,
   Put,
   UseInterceptors,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiExcludeEndpoint, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { FeatureFlagsKeysEnum, PermissionsEnum, ProductFeatureKeyEnum, UserSessionData } from '@novu/shared';
@@ -158,11 +160,30 @@ export class EnvironmentsControllerV1 {
   @SdkGroupName('Environments.ApiKeys')
   @ApiExcludeEndpoint()
   @RequirePermissions(PermissionsEnum.API_KEY_READ)
-  async listOrganizationApiKeys(@UserSession() user: UserSessionData): Promise<ApiKey[]> {
+  async listOrganizationApiKeys(
+    @UserSession() user: UserSessionData,
+    @Headers('x-environment-id') environmentId?: string
+  ): Promise<ApiKey[]> {
+    const targetEnvironmentId = environmentId || user.environmentId;
+    
+    if (environmentId && environmentId !== user.environmentId) {
+      const environment = await this.getEnvironmentUsecase.execute(
+        GetEnvironmentCommand.create({
+          environmentId: targetEnvironmentId,
+          userId: user._id,
+          organizationId: user.organizationId,
+        })
+      );
+      
+      if (!environment) {
+        throw new BadRequestException('Environment not found or access denied');
+      }
+    }
+    
     const command = GetApiKeysCommand.create({
       userId: user._id,
       organizationId: user.organizationId,
-      environmentId: user.environmentId,
+      environmentId: targetEnvironmentId,
     });
 
     return await this.getApiKeysUsecase.execute(command);
@@ -172,11 +193,30 @@ export class EnvironmentsControllerV1 {
   @ApiResponse(ApiKey, 201, true)
   @ApiExcludeEndpoint()
   @RequirePermissions(PermissionsEnum.API_KEY_WRITE)
-  async regenerateOrganizationApiKeys(@UserSession() user: UserSessionData): Promise<ApiKey[]> {
+  async regenerateOrganizationApiKeys(
+    @UserSession() user: UserSessionData,
+    @Headers('x-environment-id') environmentId?: string
+  ): Promise<ApiKey[]> {
+    const targetEnvironmentId = environmentId || user.environmentId;
+    
+    if (environmentId && environmentId !== user.environmentId) {
+      const environment = await this.getEnvironmentUsecase.execute(
+        GetEnvironmentCommand.create({
+          environmentId: targetEnvironmentId,
+          userId: user._id,
+          organizationId: user.organizationId,
+        })
+      );
+      
+      if (!environment) {
+        throw new BadRequestException('Environment not found or access denied');
+      }
+    }
+    
     const command = GetApiKeysCommand.create({
       userId: user._id,
       organizationId: user.organizationId,
-      environmentId: user.environmentId,
+      environmentId: targetEnvironmentId,
     });
 
     return await this.regenerateApiKeysUsecase.execute(command);

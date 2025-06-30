@@ -103,9 +103,9 @@ export function HeaderNav() {
       height={`${HEADER_NAV_HEIGHT}px`}
       className={css({
         position: 'sticky',
-        top: 0,
+        top: '0',
         borderBottom: 'none !important',
-        zIndex: '200 !important',
+        zIndex: 'sticky !important',
         padding: '50',
       })}
     >

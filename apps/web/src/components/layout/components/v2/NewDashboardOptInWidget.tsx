@@ -35,7 +35,7 @@ export function NewDashboardOptInWidget() {
           <IconButton onClick={dismiss} Icon={IconOutlineClose} size="xs" />
         </div>
         <Text className={styles.text}>
-          We’d love to extend you the access for the new workflows dashboard that we’re building.
+          We'd love to extend you the access for the new workflows dashboard that we're building.
         </Text>
       </div>
       <div className={styles.buttonContainer}>
@@ -49,8 +49,8 @@ export function NewDashboardOptInWidget() {
 
 const styles = {
   card: css({
-    padding: '9px 16px !important',
-    marginBottom: '16px',
+    padding: '50 100 !important',
+    marginBottom: '100',
     backgroundColor: 'surface.popover !important',
     borderTopLeftRadius: '100 !important',
     borderBottomLeftRadius: '100 !important',
@@ -72,24 +72,24 @@ const styles = {
   content: css({
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '25',
     alignSelf: 'stretch',
   }),
   header: css({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: '8px',
+    gap: '50',
   }),
   title: css({
-    fontSize: '12px',
-    fontWeight: '700 ',
-    lineHeight: '20px',
+    fontSize: '75',
+    fontWeight: 'strong',
+    lineHeight: '125',
   }),
   text: css({
-    fontSize: '12px',
-    lineHeight: '16px',
-    fontWeight: '500',
+    fontSize: '75',
+    lineHeight: '100',
+    fontWeight: 'medium',
     fontStyle: 'normal',
   }),
   buttonContainer: css({

@@ -101,7 +101,7 @@ export const Mdx = ({ code = '', mappings = {}, isChildDocs, children, isLoading
                   height: '250',
                   lineHeight: '125',
                   borderBottom: 'solid',
-                  borderBottomColor: 'table.border.row',
+                  borderBottomColor: 'table.row.border',
                 })}
               />
             );
@@ -114,7 +114,7 @@ export const Mdx = ({ code = '', mappings = {}, isChildDocs, children, isLoading
                   height: '150',
                   lineHeight: '125',
                   color: 'typography.text.main',
-                  borderBottomColor: 'table.border.header',
+                  borderBottomColor: 'table.header.border',
                 })}
               />
             );
@@ -178,7 +178,7 @@ export const Mdx = ({ code = '', mappings = {}, isChildDocs, children, isLoading
           Step: ({ className, ...props }: any) => {
             return (
               <li className={css({ lineHeight: '125', marginBottom: '50' })}>
-                <LiText className={css({ lineHeight: '150', fontSize: '100', fontWeight: 'bolder' })}>
+                <LiText className={css({ lineHeight: '150', fontSize: '100', fontWeight: 'strong' })}>
                   {props.title}
                 </LiText>
                 <LiText className={css({ lineHeight: '125' })}>{props.children}</LiText>
@@ -217,7 +217,7 @@ export const Mdx = ({ code = '', mappings = {}, isChildDocs, children, isLoading
           },
           CardGroup: ({ className, ...props }: any) => {
             return (
-              <Grid gap={16} columns={props.cols}>
+              <Grid gap="100" columns={props.cols}>
                 {props.children}
               </Grid>
             );

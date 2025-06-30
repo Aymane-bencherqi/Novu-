@@ -9,7 +9,7 @@ const iconButtonStyles = css({
   padding: '0 !important',
   backgroundImage: 'none !important',
   background: 'transparent',
-  height: 'inherit !important',
+  height: 'auto !important',
   border: 'none',
   cursor: 'pointer',
 
@@ -20,7 +20,7 @@ const iconButtonStyles = css({
     fill: 'typography.text.secondary',
   },
   '&:disabled svg': {
-    opacity: '40%',
+    opacity: '40',
   },
 
   '& .mantine-Button-icon': {

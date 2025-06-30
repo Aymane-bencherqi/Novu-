@@ -6,7 +6,7 @@ import type { IconType as NovuIconType } from './Icon.types';
 
 declare module 'react-icons/md' {
   export declare const Md123: NovuIconType;
-  export declare const Md3DRotation: NovuIconType;
+  export declare const Md3dRotation: NovuIconType;
   export declare const MdAbc: NovuIconType;
   export declare const MdAccessibilityNew: NovuIconType;
   export declare const MdAccessibility: NovuIconType;
@@ -2312,7 +2312,7 @@ declare module 'react-icons/md' {
   export declare const MdOutlineCreditCard: NovuIconType;
   export declare const MdOutlineCss: NovuIconType;
   export declare const MdOutlineCurrencyExchange: NovuIconType;
-  export declare const MdOutlineangerous: NovuIconType;
+  export declare const MdOutlineDangerous: NovuIconType;
   export declare const MdOutlineashboardCustomize: NovuIconType;
   export declare const MdOutlineashboard: NovuIconType;
   export declare const MdOutlineataExploration: NovuIconType;
@@ -2928,7 +2928,7 @@ declare module 'react-icons/md' {
   export declare const MdOutlineeleteSweep: NovuIconType;
   export declare const MdOutlineeselect: NovuIconType;
   export declare const MdOutlinerafts: NovuIconType;
-  export declare const MdOutlineynamicFeed: NovuIconType;
+  export declare const MdOutlineDynamicFeed: NovuIconType;
   export declare const MdOutlineFileCopy: NovuIconType;
   export declare const MdOutlineFilterListOff: NovuIconType;
   export declare const MdOutlineFilterList: NovuIconType;

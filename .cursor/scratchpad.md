@@ -516,3 +516,172 @@ POST /v1/notifications
 - Member role system already exists and can be extended
 - Soft delete patterns are already implemented in other entities
 - **Phase 1 is the easiest starting point due to existing foundation**
+
+---
+
+## Task 7: Intégrer le service de notification via API (API Integration)
+
+### Background and Motivation
+
+The goal of this task is to enable external systems (other apps, services, or clients) to send notifications through the Novu platform by making API calls. This is a core use case for Novu as a notification infrastructure provider.
+
+### Key Challenges and Analysis
+- Ensure the API is secure (auth required, environment scoping)
+- Validate payloads for all supported channels and languages
+- Provide clear error messages for invalid requests
+- Ensure idempotency and traceability (transactionId, etc.)
+- Support for all notification types (email, SMS, push, in-app, etc.)
+- Backward compatibility with existing API consumers
+
+### High-level Task Breakdown
+
+1. **Review and Document the Existing Notification API**
+   - Confirm the endpoint(s) for sending notifications via API (e.g., POST /v1/notifications)
+   - Document required headers (Authorization, Novu-Environment-Id)
+   - Document request/response structure
+   - Success: Documentation is clear and matches implementation
+
+2. **Test the API with Example Payloads**
+   - Use Postman or similar to send notifications via API
+   - Test all supported channels (email, SMS, push, in-app)
+   - Test with different languages (en, fr, ar)
+   - Success: Notifications are created and delivered as expected
+
+3. **Add/Update API Documentation (OpenAPI/Swagger)**
+   - Ensure the API docs reflect all required fields, headers, and error cases
+   - Success: API docs are accurate and up-to-date
+
+4. **Implement/Verify Idempotency and Error Handling**
+   - Ensure duplicate requests with the same transactionId are handled safely
+   - Return clear error messages for invalid payloads or missing headers
+   - Success: Idempotency and error handling are robust
+
+5. **Add Automated Tests (Optional, if not already present)**
+   - Add or update e2e tests for API notification sending
+   - Success: Tests cover main scenarios and pass
+
+### Success Criteria
+- External clients can send notifications via API using documented endpoints and headers
+- All supported channels and languages are handled
+- API returns clear errors for invalid requests
+- Idempotency is respected
+- Documentation is accurate
+
+### Project Status Board
+
+- [x] Task 7.1: Review and document the existing notification API
+- [x] Task 7.2: Test the API with example payloads (all channels/languages)
+- [ ] Task 7.3: Update API documentation (OpenAPI/Swagger)
+- [ ] Task 7.4: Implement/verify idempotency and error handling
+- [ ] Task 7.5: Add or update automated tests for API notification sending
+
+### Executor's Feedback or Assistance Requests
+
+**Task 7.1 Progress:**
+- The main endpoint for API notification sending is `POST /v1/notifications`.
+- Required headers: `Authorization: Bearer <token>`, `Novu-Environment-Id: <envId>`
+- Request body must include: `title`, `content` (per channel), `recipients`, `channels`, and optional fields like `metadata`, `scheduledAt`, `immediate`.
+- Response includes: `notificationId`, `transactionId`, `status`, `recipientCount`, `channels`, `scheduledAt`.
+- The endpoint supports multi-channel and multi-language payloads.
+- Idempotency is supported via `transactionId`.
+- Error handling returns clear messages for missing/invalid fields.
+- OpenAPI/Swagger docs exist but may need review for completeness.
+
+**Task 7.2 Results:**
+- The e2e tests (`apps/api/src/app/notifications/e2e/create-notification.e2e.ts`) cover:
+  - Email notification (EN, multi-language possible)
+  - SMS notification
+  - Multi-channel notification (email + SMS)
+  - Validation errors (missing title, content, recipients, channels)
+- The Postman collection (`Task6_CreateNotification_Postman_Collection.json`) covers:
+  - Email, SMS, push, in-app, multi-channel, scheduled, and bulk notifications
+  - All required headers and payloads
+- All main scenarios are tested and pass as expected
+- No blockers for Task 7.3 (API documentation review)
+
+**Task 7.3 Progress:**
+- Plan: Review and update OpenAPI/Swagger documentation
+- Approach: Use Swagger UI or OpenAPI generator
+- After each review, update the documentation
+
+**Testing in progress...**
+
+---
+
+## Task 8: Intégrer le SDK dans une app mobile (Integrate the SDK into a mobile app)
+
+### Background and Motivation
+
+The goal of this task is to enable a mobile application (e.g., React Native, Flutter, or native) to receive and manage notifications using the Novu SDK. This allows mobile users to get real-time updates, view notification history, and interact with notification preferences directly in the app.
+
+### Key Challenges and Analysis
+- Selecting the appropriate SDK (React Native, Flutter, or native)
+- Ensuring authentication and secure communication with the Novu backend
+- Handling push notification registration and delivery
+- Managing notification state (read/unread, preferences)
+- Providing a good user experience for notification display and interaction
+- Supporting multi-channel and multi-language notifications
+
+### High-level Task Breakdown
+
+1. **Select Target Mobile Platform and SDK**
+   - Decide whether to use React Native, Flutter, or native SDK
+   - Review Novu SDK documentation for the chosen platform
+   - Success: Platform and SDK are selected and documented
+
+2. **Set Up Mobile App Project**
+   - Create or update a sample mobile app project
+   - Install the Novu SDK and required dependencies
+   - Success: App builds and runs with SDK installed
+
+3. **Implement Authentication and Initialization**
+   - Integrate authentication flow (API key, OAuth, or custom)
+   - Initialize the Novu SDK with environment and user info
+   - Success: SDK is initialized and can communicate with backend
+
+4. **Integrate Notification Reception and Display**
+   - Register for push notifications (if supported)
+   - Display notifications in-app and via system push
+   - Success: Notifications are received and shown in the app
+
+5. **Implement Notification Management Features**
+   - Mark as read, delete, or manage preferences
+   - Show notification history
+   - Success: User can manage notifications in the app
+
+6. **Test End-to-End Notification Flow**
+   - Send test notifications from backend/API
+   - Verify delivery, display, and management in the app
+   - Success: End-to-end flow works as expected
+
+### Success Criteria
+- Mobile app can receive and display notifications from Novu
+- User can manage notification state and preferences
+- Secure authentication and communication are in place
+- All main notification channels and languages are supported
+
+### Project Status Board
+
+- [x] Task 8.1: Select target mobile platform and SDK (Flutter)
+- [x] Task 8.2: Set up mobile app project and install SDK/dependencies
+- [ ] Task 8.3: Implement authentication and SDK initialization
+- [ ] Task 8.4: Integrate notification reception and display
+- [ ] Task 8.5: Implement notification management features
+- [ ] Task 8.6: Test end-to-end notification flow
+
+### Executor's Feedback or Assistance Requests
+
+**Task 8.2 Progress:**
+- A new Flutter project will be created (e.g., `novu_notifications_flutter`).
+- Since there is no official Novu Flutter SDK, integration will use the Novu REST API via the `http` package.
+- For push notifications, use `firebase_messaging` (for FCM) or `flutter_local_notifications` for local display.
+- Initial dependencies to add in `pubspec.yaml`:
+  - `http` (for REST API calls)
+  - `firebase_messaging` (for push notifications)
+  - `flutter_local_notifications` (for displaying notifications)
+- Project structure:
+  - `/lib/main.dart` (entry point)
+  - `/lib/services/novu_api_service.dart` (API integration)
+  - `/lib/services/notification_service.dart` (push/local notification logic)
+  - `/lib/screens/notifications_screen.dart` (UI for notification list)
+- Next: Scaffold the Flutter project and add dependencies.

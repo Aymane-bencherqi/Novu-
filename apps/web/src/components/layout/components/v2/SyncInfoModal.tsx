@@ -85,7 +85,7 @@ export const SyncInfoModal: FC<SyncInfoModalProps> = ({ isOpen, toggleOpen, refe
       label: 'Manual',
       content: (
         <>
-          <Text color="typography.text.secondary" className={css({ marginBottom: 30 })}>
+          <Text color="typography.text.secondary" className={css({ marginBottom: '150' })}>
             For your changes to be visible on the cloud dashboard, you need to deploy your local novu application to a
             cloud provider and perform a Sync command with the cloud endpoint url. Learn more about syncing on{' '}
             <a
