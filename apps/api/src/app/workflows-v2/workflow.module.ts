@@ -36,6 +36,7 @@ import { BuildStepIssuesUsecase } from './usecases/build-step-issues/build-step-
 import { WorkflowController } from './workflow.controller';
 import { DuplicateWorkflowUseCase } from './usecases/duplicate-workflow/duplicate-workflow.usecase';
 import { WebhooksModule } from '../webhooks/webhooks.module';
+import { WorkflowVersioningService } from './services';
 
 const DAL_REPOSITORIES = [CommunityOrganizationRepository];
 
@@ -73,7 +74,9 @@ if (process.env.NOVU_ENTERPRISE === 'true') {
     BuildStepIssuesUsecase,
     ResourceValidatorService,
     TierRestrictionsValidateUsecase,
+    WorkflowVersioningService,
   ],
+  exports: [],
 })
 export class WorkflowModule implements NestModule {
   configure(consumer: MiddlewareConsumer): MiddlewareConsumer | void {}

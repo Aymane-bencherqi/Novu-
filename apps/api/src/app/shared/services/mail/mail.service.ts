@@ -15,6 +15,11 @@ export interface ISendMail {
   params?: {
     [key: string]: string | any[] | any; // eslint-disable-line @typescript-eslint/no-explicit-any
   };
+  attachments?: Array<{
+    filename: string;
+    content: string;
+    type?: string;
+  }>;
 }
 
 export class MailService {
@@ -50,6 +55,15 @@ export class MailService {
 
     if (mail.html) {
       mailObject.html = mail.html;
+    }
+
+    if (mail.attachments && mail.attachments.length > 0) {
+      mailObject.attachments = mail.attachments.map(attachment => ({
+        filename: attachment.filename,
+        content: attachment.content,
+        type: attachment.type || 'application/octet-stream',
+        disposition: 'attachment'
+      }));
     }
 
     return await this.sendgrid.send(mailObject, false);

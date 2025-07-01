@@ -10,5 +10,6 @@ import { NotificationsController } from './notification.controller';
   imports: [SharedModule, AuthModule, EventsModule],
   providers: [...USE_CASES, CommunityOrganizationRepository],
   controllers: [NotificationsController],
+  exports: [...USE_CASES],
 })
 export class NotificationModule {}

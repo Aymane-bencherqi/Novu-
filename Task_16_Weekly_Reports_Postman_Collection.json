@@ -1,0 +1,255 @@
+{
+  "info": {
+    "name": "Task 16 - Weekly Reports",
+    "description": "Postman collection for testing Task 16: Weekly Report Delivery functionality. This collection includes endpoints for generating, previewing, and sending weekly reports via email, as well as manual triggering capabilities.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/v1",
+      "type": "string"
+    },
+    {
+      "key": "environmentId",
+      "value": "your-environment-id",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "your-auth-token",
+      "type": "string"
+    },
+    {
+      "key": "organizationId",
+      "value": "your-organization-id",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "1. Get Weekly Report Preview",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "novu-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/reports/weekly/preview",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "weekly", "preview"]
+        },
+        "description": "Get a preview of the weekly report data without generating files. This endpoint returns JSON with report summary, KPIs, and statistics for the past week."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Export Weekly Report as PDF",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "novu-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/reports/weekly/export?format=pdf",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "weekly", "export"],
+          "query": [
+            {
+              "key": "format",
+              "value": "pdf",
+              "description": "Export format (pdf or excel)"
+            }
+          ]
+        },
+        "description": "Export weekly report as PDF file. The file will be automatically downloaded with a timestamped filename."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Export Weekly Report as Excel",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "novu-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/reports/weekly/export?format=excel",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "weekly", "export"],
+          "query": [
+            {
+              "key": "format",
+              "value": "excel",
+              "description": "Export format (pdf or excel)"
+            }
+          ]
+        },
+        "description": "Export weekly report as Excel file (.xlsx). The file will be automatically downloaded with a timestamped filename."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Send Weekly Report via Email",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "novu-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"recipientEmail\": \"test@example.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/reports/weekly/send-email",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "weekly", "send-email"]
+        },
+        "description": "Send weekly report via email to a specified recipient. The email will include an HTML summary and a PDF attachment with detailed report data."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Trigger Weekly Reports Manually",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "novu-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"organizationId\": \"{{organizationId}}\",\n  \"environmentId\": \"{{environmentId}}\",\n  \"userId\": \"optional-user-id\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/reports/weekly/trigger",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "weekly", "trigger"]
+        },
+        "description": "Manually trigger weekly report generation and email delivery. This bypasses the scheduled cron job and immediately sends reports to all eligible users in the specified organization."
+      },
+      "response": []
+    },
+    {
+      "name": "6. Test Weekly Report Preview (No Auth)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "novu-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/reports/weekly/preview",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "weekly", "preview"]
+        },
+        "description": "Test weekly report preview without authentication to verify the endpoint works with mock data."
+      },
+      "response": []
+    },
+    {
+      "name": "7. Test Weekly Report Export PDF (No Auth)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "novu-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/reports/weekly/export?format=pdf",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "weekly", "export"],
+          "query": [
+            {
+              "key": "format",
+              "value": "pdf"
+            }
+          ]
+        },
+        "description": "Test weekly report PDF export without authentication to verify the endpoint works with mock data."
+      },
+      "response": []
+    },
+    {
+      "name": "8. Test Weekly Report Export Excel (No Auth)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "novu-environment-id",
+            "value": "{{environmentId}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/reports/weekly/export?format=excel",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "weekly", "export"],
+          "query": [
+            {
+              "key": "format",
+              "value": "excel"
+            }
+          ]
+        },
+        "description": "Test weekly report Excel export without authentication to verify the endpoint works with mock data."
+      },
+      "response": []
+    }
+  ]
+} 

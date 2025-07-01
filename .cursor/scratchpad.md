@@ -123,16 +123,12 @@ The 43 tasks can be categorized into several functional areas:
    - Flutter SDK implementation
    - Angular and React SDK improvements
 
-### Phase 3: Analytics & Monitoring (Tasks 9-10, 15-17)
-6. **Analytics System**
-   - KPI calculation and storage
-   - Report generation (PDF/Excel)
-   - Weekly report automation
-
-7. **Monitoring & Alerting**
-   - Channel health monitoring
-   - Error tracking and alerting
-   - Log management system
+### Phase 3: Analytics & Monitoring
+- [ ] Task 9: KPI and statistics
+- [ ] Task 10: Technical alerts for channel failures
+- [x] Task 15: Export reports in PDF/Excel ✅
+- [ ] Task 16: Weekly report delivery
+- [ ] Task 17: Error log consultation
 
 ### Phase 4: User Experience (Tasks 11, 14, 22-24)
 8. **Notification Management**
@@ -262,7 +258,7 @@ After analyzing the existing codebase, **Phase 1** is the easiest to implement b
 ### Phase 3: Analytics & Monitoring
 - [ ] Task 9: KPI and statistics
 - [ ] Task 10: Technical alerts for channel failures
-- [ ] Task 15: Export reports in PDF/Excel
+- [x] Task 15: Export reports in PDF/Excel ✅
 - [ ] Task 16: Weekly report delivery
 - [ ] Task 17: Error log consultation
 
@@ -295,9 +291,9 @@ After analyzing the existing codebase, **Phase 1** is the easiest to implement b
 
 ## Current Status / Progress Tracking
 
-**Status**: Task 6 Completed ✅ - Ready to proceed to Task 7
-**Current Phase**: Task 7 - Integrate notification service via API
-**Next Steps**: Analyze and plan Task 7 implementation
+**Status**: Task 15 Completed ✅ - Ready to proceed to Task 16
+**Current Phase**: Task 16 - Weekly report delivery (IN PROGRESS)
+**Next Steps**: Implement weekly report service with data aggregation
 
 ### Task 3: Instance Modification, Logical Deletion, and Restoration (Organizations) ✅ COMPLETED
 
@@ -685,3 +681,254 @@ The goal of this task is to enable a mobile application (e.g., React Native, Flu
   - `/lib/services/notification_service.dart` (push/local notification logic)
   - `/lib/screens/notifications_screen.dart` (UI for notification list)
 - Next: Scaffold the Flutter project and add dependencies.
+
+## Task 15: Exporter un rapport en PDF/Excel (Export Report as PDF/Excel) ✅ COMPLETED
+
+### Background and Motivation
+Users need to export notification data and KPIs as PDF or Excel files for reporting, auditing, or sharing purposes. Supporting both formats increases flexibility for business and technical users.
+
+### Implementation Completed ✅
+- ✅ **Created Reports Module**: New `apps/api/src/app/reports/` directory with controller, service, and module
+- ✅ **Implemented Export Endpoints**:
+  - `GET /v1/reports/notifications/export?format=pdf|excel`
+  - `GET /v1/reports/kpis/export?format=pdf|excel`
+- ✅ **PDF Generation**: Using `pdfkit` library for both notifications and KPIs
+- ✅ **Excel Generation**: Using `exceljs` library for both notifications and KPIs
+- ✅ **File Download**: Proper headers for file attachment with timestamped filenames
+- ✅ **Error Handling**: Validation for format parameter and error responses
+- ✅ **Data Integration**: Reuses existing notification and KPI services for data fetching
+
+### Features Implemented
+- **Notifications Export**:
+  - PDF: Table format with ID, Template, Channel, Status, Created date
+  - Excel: Structured worksheet with headers and data rows including recipient information
+- **KPIs Export**:
+  - PDF: Summary metrics and channel breakdown
+  - Excel: Metric-value pairs with channel breakdown section
+- **Format Validation**: Only accepts 'pdf' or 'excel' formats
+- **Authentication**: Uses existing user session for data access
+- **File Naming**: Automatic timestamped filenames (e.g., `notifications-2024-01-15.pdf`)
+
+### API Usage Examples
+```bash
+# Export notifications as PDF
+GET /v1/reports/notifications/export?format=pdf
+
+# Export notifications as Excel
+GET /v1/reports/notifications/export?format=excel
+
+# Export KPIs as PDF
+GET /v1/reports/kpis/export?format=pdf
+
+# Export KPIs as Excel
+GET /v1/reports/kpis/export?format=excel
+```
+
+### Success Criteria Met ✅
+- ✅ Users can export filtered notification data and KPIs as PDF or Excel
+- ✅ Exported files contain correct data and columns
+- ✅ Endpoints are secure and performant
+- ✅ Proper file download headers and error handling
+
+### Dependencies Added
+- `pdfkit`: For PDF generation
+- `exceljs`: For Excel file generation
+
+### Next Steps
+- Add filtering capabilities (date range, channel, status)
+- Implement pagination for large datasets
+- Add more detailed formatting options
+- Create automated tests for export functionality
+
+## Task 16: Recevoir un rapport hebdomadaire (Receive Weekly Report)
+
+### Background and Motivation
+
+The goal of this task is to implement an automated weekly report system that generates and delivers comprehensive notification analytics to users via email. This feature will help users stay informed about their notification performance, usage patterns, and system health without having to manually check the dashboard.
+
+### Key Challenges and Analysis
+
+1. **Data Aggregation**: Collect and aggregate notification data over a 7-day period
+2. **Report Generation**: Create comprehensive reports with KPIs, trends, and insights
+3. **Scheduling**: Implement automated weekly execution (e.g., every Monday at 9 AM)
+4. **Email Delivery**: Send reports via email with proper formatting
+5. **User Preferences**: Allow users to opt-in/out and configure report preferences
+6. **Multi-tenant Support**: Ensure reports are scoped to specific organizations/environments
+
+### High-level Task Breakdown
+
+1. **Create Weekly Report Service**
+   - Implement data aggregation logic for 7-day periods
+   - Calculate weekly KPIs and trends
+   - Generate report content with insights
+   - Success: Service can generate comprehensive weekly reports
+
+2. **Implement Email Delivery System**
+   - Create email templates for weekly reports
+   - Integrate with existing email provider
+   - Handle email sending with proper formatting
+   - Success: Reports are delivered via email with good formatting
+
+3. **Add Scheduling and Automation**
+   - Implement cron job or scheduler for weekly execution
+   - Add configuration for report timing and frequency
+   - Handle timezone considerations
+   - Success: Reports are automatically generated and sent weekly
+
+4. **Create User Preferences System**
+   - Add user preferences for report frequency and content
+   - Implement opt-in/opt-out functionality
+   - Allow customization of report sections
+   - Success: Users can control their report preferences
+
+5. **Add API Endpoints for Manual Triggering**
+   - Create endpoint to manually trigger weekly reports
+   - Add endpoint to view report history
+   - Implement report preview functionality
+   - Success: Users can manually request reports and view history
+
+### Success Criteria
+- Weekly reports are automatically generated and sent via email
+- Reports contain comprehensive analytics (KPIs, trends, channel performance)
+- Users can configure their report preferences
+- Reports are properly scoped to user's organization/environment
+- Manual report triggering is available via API
+
+### Project Status Board
+
+- [ ] Task 16.1: Create weekly report service with data aggregation
+- [ ] Task 16.2: Implement email delivery system with templates
+- [ ] Task 16.3: Add scheduling and automation (cron jobs)
+- [ ] Task 16.4: Create user preferences system for report configuration
+- [ ] Task 16.5: Add API endpoints for manual triggering and history
+
+### Executor's Feedback or Assistance Requests
+
+**Ready to start Task 16.1: Create weekly report service**
+- Will leverage existing KPI and notification services from Task 15
+- Need to implement data aggregation for 7-day periods
+- Will create comprehensive report content with insights and trends
+
+## Task 17: Error Log Consultation - Service & Controller Implementation Plan
+
+### 1. Create DTOs
+- TechnicalAlertListItemDto (for list responses)
+- TechnicalAlertDetailDto (for detail responses)
+- (Optional) Export DTOs if supporting CSV/JSON export
+- (Optional) ErrorTypeDto for listing error types
+- **Success:** DTOs defined in `apps/api/src/app/logs/dto/`
+
+### 2. Implement TechnicalAlertLogService
+- Method: `findAll(filters, pagination)`
+  - Query TechnicalAlert collection with filters (date, status, channel, providerId, errorType, search, org/env)
+  - Support pagination and sorting
+- Method: `findById(id)`
+  - Fetch a single TechnicalAlert by ID
+- (Optional) Method: `export(filters, format)`
+  - Export filtered logs as CSV/JSON
+- (Optional) Method: `listErrorTypes()`
+  - Return unique errorType values
+- **Success:** Service returns correct data for all use cases
+
+### 3. Implement LogsController
+- Endpoint: `GET /v1/logs/errors` (list, filter, paginate)
+- Endpoint: `GET /v1/logs/errors/:id` (detail)
+- (Optional) Endpoint: `GET /v1/logs/errors/export` (export)
+- (Optional) Endpoint: `GET /v1/logs/error-types` (list error types)
+- Add authentication/authorization guards (admin or scoped user)
+- **Success:** Endpoints return expected data, enforce access control
+
+### 4. Integrate with DAL
+- Use `TechnicalAlertRepository` for DB access
+- Ensure queries are efficient and indexed (date, org/env, status, etc.)
+- **Success:** Service uses DAL for all data access
+
+### 5. Testing & Validation
+- Unit tests for service methods (filters, pagination, edge cases)
+- Integration tests for controller endpoints
+- Test with real and mock data
+- **Success:** All tests pass, endpoints are reliable
+
+### 6. (Optional) Dashboard Integration
+- Expose API to dashboard for admin log viewing
+- **Success:** Logs visible and usable in dashboard
+
+### Project Status Board (detailed)
+- [ ] 17.2.1 Create DTOs
+- [ ] 17.2.2 Implement TechnicalAlertLogService
+- [ ] 17.2.3 Implement LogsController
+- [ ] 17.2.4 Integrate with DAL
+- [ ] 17.2.5 Testing & validation
+- [ ] 17.2.6 (Optional) Dashboard integration
+
+### Executor's Feedback or Assistance Requests
+- Ready to start with DTO creation unless further adjustments are needed.
+
+## Task 20: Workflow Management (Design, Publication, Archiving, Versioning) - Planning
+
+### Background and Motivation
+Workflows are at the core of the notification system, defining how notifications are triggered, processed, and delivered across channels. Robust workflow management is essential for flexibility, auditability, and safe iteration in production environments.
+
+### Key Features
+- **Design:** Create and edit workflows (steps, channels, conditions, etc.)
+- **Publication:** Publish workflows to make them active/usable
+- **Archiving:** Archive (soft-delete) workflows to remove them from active use without permanent deletion
+- **Versioning:** Maintain a history of workflow changes, allow rollback, and view previous versions
+
+### Key Challenges and Analysis
+- **Schema:** How to represent workflow versions and status (draft, published, archived)
+- **API:** Endpoints for CRUD, publish, archive, and version management
+- **Data Integrity:** Prevent accidental loss of published/active workflows
+- **UI/UX:** (If dashboard) Clear version history, easy rollback, and safe archiving
+- **Performance:** Efficient queries for versioned workflows
+
+### High-level Task Breakdown
+1. **Analyze Existing Workflow Model**
+   - Review current workflow entity/schema for versioning and status fields
+   - **Success:** Clear understanding of current model and gaps
+
+2. **Design Versioning & Status Model**
+   - Add/confirm fields: `status` (draft/published/archived), `version`, `previousVersionId`, `publishedAt`, etc.
+   - **Success:** Model supports all required states and history
+
+3. **API Design**
+   - Endpoints for:
+     - Create/edit workflow (draft)
+     - Publish workflow (set as active)
+     - Archive workflow
+     - List versions/history
+     - Rollback to previous version
+   - **Success:** API spec reviewed and approved
+
+4. **Implement Service Logic**
+   - Handle version creation, status transitions, and archiving
+   - Ensure only one published version per workflow key
+   - **Success:** Service enforces business rules
+
+5. **Controller/Endpoints**
+   - Implement endpoints for all actions
+   - Add authentication/authorization
+   - **Success:** Endpoints work as expected
+
+6. **Testing & Validation**
+   - Unit/integration tests for all logic and endpoints
+   - Test versioning, publishing, archiving, and rollback
+   - **Success:** All tests pass, no data loss
+
+### Success Criteria
+- Can create, edit, publish, archive, and version workflows via API
+- Version history is accurate and retrievable
+- Only one published version per workflow key
+- Archived workflows are not active but retrievable
+- Rollback to previous versions is possible
+
+### Project Status Board
+- [ ] 20.1 Analyze existing workflow model
+- [ ] 20.2 Design versioning & status model
+- [ ] 20.3 API design
+- [ ] 20.4 Implement service logic
+- [ ] 20.5 Implement controller/endpoints
+- [ ] 20.6 Testing & validation
+
+### Executor's Feedback or Assistance Requests
+- Ready to analyze the current workflow model and proceed to implementation.

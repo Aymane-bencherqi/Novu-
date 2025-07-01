@@ -214,7 +214,11 @@
   },
   "dependencies": {
     "@nestjs/mongoose": "^11.0.3",
+    "@nestjs/schedule": "^4.1.1",
+    "@nestjs/terminus": "10.2.3",
+    "exceljs": "^4.4.0",
     "mongoose": "^7.8.7",
+    "pdfkit": "^0.17.1",
     "tslib": "^2.4.0"
   },
   "pnpm": {

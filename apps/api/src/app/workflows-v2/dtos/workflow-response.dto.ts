@@ -62,6 +62,18 @@ export class WorkflowResponseDto extends WorkflowCommonsFields {
   @IsEnum(WorkflowStatusEnum)
   status: WorkflowStatusEnum;
 
+  @ApiProperty({ description: 'Workflow version' })
+  @IsOptional()
+  version?: number;
+
+  @ApiProperty({ description: 'Previous version ID', required: false, nullable: true })
+  @IsOptional()
+  previousVersionId?: string | null;
+
+  @ApiProperty({ description: 'Published at', required: false, nullable: true })
+  @IsOptional()
+  publishedAt?: string | null;
+
   @ApiPropertyOptional({
     description: 'Runtime issues for workflow creation and update',
     type: 'object',

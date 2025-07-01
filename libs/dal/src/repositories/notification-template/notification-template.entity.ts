@@ -85,7 +85,13 @@ export class NotificationTemplateEntity {
 
   issues: Record<string, RuntimeIssue[]>;
 
-  status?: WorkflowStatusEnum;
+  status?: 'draft' | 'published' | 'archived';
+
+  version?: number;
+
+  previousVersionId?: string | null;
+
+  publishedAt?: string | null;
 
   lastTriggeredAt?: string;
 }

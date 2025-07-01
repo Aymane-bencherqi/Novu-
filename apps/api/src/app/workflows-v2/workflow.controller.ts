@@ -57,6 +57,7 @@ import {
   WorkflowResponseDto,
   WorkflowTestDataResponseDto,
 } from './dtos';
+import { WorkflowVersioningService } from './services';
 
 @ApiCommonResponses()
 @Controller({ path: `/workflows`, version: '2' })
@@ -74,7 +75,8 @@ export class WorkflowController {
     private buildWorkflowTestDataUseCase: BuildWorkflowTestDataUseCase,
     private buildStepDataUsecase: BuildStepDataUsecase,
     private patchWorkflowUsecase: PatchWorkflowUsecase,
-    private duplicateWorkflowUseCase: DuplicateWorkflowUseCase
+    private duplicateWorkflowUseCase: DuplicateWorkflowUseCase,
+    private workflowVersioningService: WorkflowVersioningService
   ) {}
 
   @Post('')
@@ -319,5 +321,45 @@ export class WorkflowController {
         user,
       })
     );
+  }
+
+  @Post(':workflowId/publish')
+  @ApiOperation({ summary: 'Publish workflow', description: 'Publishes a new version of the workflow' })
+  @RequirePermissions(PermissionsEnum.WORKFLOW_WRITE)
+  async publishWorkflow(
+    @UserSession(ParseSlugEnvironmentIdPipe) user: UserSessionData,
+    @Param('workflowId', ParseSlugIdPipe) workflowId: string
+  ) {
+    return this.workflowVersioningService.publishWorkflow(workflowId, user);
+  }
+
+  @Post(':workflowId/archive')
+  @ApiOperation({ summary: 'Archive workflow', description: 'Archives the workflow' })
+  @RequirePermissions(PermissionsEnum.WORKFLOW_WRITE)
+  async archiveWorkflow(
+    @UserSession(ParseSlugEnvironmentIdPipe) user: UserSessionData,
+    @Param('workflowId', ParseSlugIdPipe) workflowId: string
+  ) {
+    return this.workflowVersioningService.archiveWorkflow(workflowId, user);
+  }
+
+  @Get(':workflowId/versions')
+  @ApiOperation({ summary: 'List workflow versions', description: 'Lists all versions of the workflow' })
+  @RequirePermissions(PermissionsEnum.WORKFLOW_READ)
+  async listWorkflowVersions(
+    @UserSession(ParseSlugEnvironmentIdPipe) user: UserSessionData,
+    @Param('workflowId', ParseSlugIdPipe) workflowId: string
+  ) {
+    return this.workflowVersioningService.listWorkflowVersions(workflowId, user);
+  }
+
+  @Post(':workflowId/rollback')
+  @ApiOperation({ summary: 'Rollback workflow', description: 'Rolls back to the previous version of the workflow' })
+  @RequirePermissions(PermissionsEnum.WORKFLOW_WRITE)
+  async rollbackWorkflow(
+    @UserSession(ParseSlugEnvironmentIdPipe) user: UserSessionData,
+    @Param('workflowId', ParseSlugIdPipe) workflowId: string
+  ) {
+    return this.workflowVersioningService.rollbackWorkflow(workflowId, user);
   }
 }

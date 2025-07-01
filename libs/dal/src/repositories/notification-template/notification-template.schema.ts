@@ -203,6 +203,21 @@ const notificationTemplateSchema = new Schema<NotificationTemplateDBModel>(
     },
     status: {
       type: Schema.Types.String,
+      enum: ['draft', 'published', 'archived'],
+      default: 'draft',
+    },
+    version: {
+      type: Schema.Types.Number,
+      default: 1,
+    },
+    previousVersionId: {
+      type: Schema.Types.ObjectId,
+      ref: 'NotificationTemplate',
+      default: null,
+    },
+    publishedAt: {
+      type: Schema.Types.Date,
+      default: null,
     },
     lastTriggeredAt: {
       type: Schema.Types.Date,

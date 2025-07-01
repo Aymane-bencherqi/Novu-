@@ -54,6 +54,8 @@ import { WorkflowOverridesModule } from './app/workflow-overrides/workflow-overr
 import { WorkflowModuleV1 } from './app/workflows-v1/workflow-v1.module';
 import { WorkflowModule } from './app/workflows-v2/workflow.module';
 import { AlertsModule } from './app/alerts/alerts.module';
+import { ReportsModule } from './app/reports/reports.module';
+import { LogsModule } from './app/logs/logs.module';
 
 const enterpriseImports = (): Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference> => {
   const modules: Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference> = [];
@@ -121,6 +123,8 @@ const baseModules: Array<Type | DynamicModule | Promise<DynamicModule> | Forward
   EnvironmentsModule,
   NovuModule,
   AlertsModule,
+  ReportsModule,
+  LogsModule,
 ];
 
 const enterpriseModules = enterpriseImports();
